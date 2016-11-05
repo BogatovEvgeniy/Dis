@@ -2,19 +2,30 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:gravity="center"
+        android:text="@string/analyze_objects_of_is"
+        android:textSize="24sp"
+        android:textStyle="bold|italic" />
+
+
     <GridLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:columnCount="2"
         android:rowCount="5">
 
+
         <TextView
             android:layout_width="120dp"
             android:layout_height="48dp"
             android:gravity="center_vertical"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
-            android:text="@string/log_name"
+            android:text="@string/select_departments"
             android:textSize="16sp" />
 
         <TextView
@@ -23,17 +34,18 @@
             android:gravity="center_vertical"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
-            android:text="@string/log_name_mock"
+            android:text="@string/select_departments_mock"
             android:textSize="16sp" />
 
         <TextView
             android:layout_width="120dp"
-            android:layout_height="48dp"
+            android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
-            android:text="@string/process_found"
-            android:textSize="16sp" />
+            android:text="@string/select_objects"
+            android:textSize="16sp"
+            android:layout_marginBottom="16dp"/>
 
         <TextView
             android:layout_height="48dp"
@@ -41,8 +53,14 @@
             android:gravity="center_vertical"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
-            android:text="@string/process_found_mock"
+            android:text="@string/selected_objects_mock"
             android:textSize="16sp" />
+
+        <Button
+            android:layout_columnSpan="2"
+            android:layout_gravity="fill"
+            android:text="@string/upload_knowledges_from_file_system"
+            />
 
         <TextView
             android:layout_width="120dp"
@@ -50,8 +68,10 @@
             android:gravity="center_vertical"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
-            android:text="@string/process_count"
-            android:textSize="16sp" />
+            android:text="@string/uploaded_knowledges"
+            android:textSize="16sp"
+            android:layout_marginBottom="32dp"
+            />
 
         <TextView
             android:layout_height="48dp"
@@ -59,8 +79,26 @@
             android:gravity="center_vertical"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
-            android:text="@string/process_count_mock"
+            android:text="@string/uploaded_knowledges_mock"
             android:textSize="16sp" />
+
+        <TextView
+            android:layout_columnSpan="2"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:text="@string/formation_result"
+            android:textSize="20sp"
+            android:textStyle="bold|italic"
+            android:layout_gravity="center_horizontal"/>
+
+        <ImageView
+            android:layout_columnSpan="2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/black" />
 
         <TextView
             android:layout_width="120dp"
@@ -73,11 +111,11 @@
 
         <TextView
             android:layout_height="48dp"
-            android:layout_gravity="fill_horizontal"
-            android:gravity="center_vertical"
+            android:layout_gravity="fill_horizontal|right"
+            android:gravity="right|center_vertical"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
-            android:text="@string/events_count_mock"
+            android:text="@string/filtered_events_count_mock"
             android:textSize="16sp" />
 
         <TextView
@@ -86,16 +124,16 @@
             android:gravity="center_vertical"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
-            android:text="@string/starts_from"
+            android:text="@string/relations_count"
             android:textSize="16sp" />
 
         <TextView
             android:layout_height="48dp"
             android:layout_gravity="fill_horizontal"
-            android:gravity="center_vertical"
+            android:gravity="right|center_vertical"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
-            android:text="@string/starts_on_mock"
+            android:text="@string/relations_count_mock"
             android:textSize="16sp" />
 
         <TextView
@@ -104,53 +142,23 @@
             android:gravity="center_vertical"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
-            android:text="@string/ends_on"
+            android:text="@string/founded_processes"
             android:textSize="16sp" />
 
         <TextView
             android:layout_height="48dp"
             android:layout_gravity="fill_horizontal"
-            android:gravity="center_vertical"
+            android:gravity="center_vertical|right"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
-            android:text="@string/ends_on_mock"
+            android:text="@string/founded_processes_mock"
             android:textSize="16sp" />
+ </GridLayout>
 
-        <TextView
-            android:layout_width="120dp"
-            android:layout_height="48dp"
-            android:gravity="center_vertical"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:text="@string/file_size"
-            android:textSize="16sp" />
-
-        <TextView
-            android:layout_height="48dp"
-            android:layout_gravity="fill_horizontal"
-            android:gravity="center_vertical"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:text="@string/file_size_mock"
-            android:textSize="16sp" />
-
-        <TextView
-            android:layout_width="120dp"
-            android:layout_height="48dp"
-            android:gravity="center_vertical"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:text="@string/file_last_modified"
-            android:textSize="16sp" />
-
-        <TextView
-            android:layout_height="48dp"
-            android:layout_gravity="fill_horizontal"
-            android:gravity="center_vertical"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:text="@string/file_last_modified_mock"
-            android:textSize="16sp" />
-    </GridLayout>
-
+    <Button
+        android:layout_height="48dp"
+        android:layout_width="wrap_content"
+        android:layout_gravity="right"
+        android:text="@string/export_results"
+        />
 </LinearLayout>

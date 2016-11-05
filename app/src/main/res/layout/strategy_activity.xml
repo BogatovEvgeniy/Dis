@@ -22,7 +22,6 @@
         android:id="@+id/object_analyze"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingB="16dp"
         android:paddingTop="16dp"
         android:paddingLeft="16dp"
         android:text="@string/click_to_analyze_only_objects"
