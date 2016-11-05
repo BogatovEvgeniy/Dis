@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">Dissertation</string>
+    <string name="method1">Method 1: \n The method of formation restrictions for logs</string>
+    <string name="method2">Method 2:\n The method of  log analyze of base date</string>
+    <string name="get_log_from_file_system">  >>> Get log from file system </string>
+    <string name="sign_out">Sign out</string>
+    <string name="set_end_event">Set end event</string>
+    <string name="sign_in">Sign in</string>
+    <string name="set_start_event">Set start event</string>
+    <string name="log_name">Log name</string>
+    <string name="log_name_mock">Development cycle</string>
+    <string name="events_count">Events count</string>
+    <string name="events_count_mock">32432</string>
+    <string name="starts_from">Starts from:</string>
+    <string name="starts_on_mock">8:35 AM 01/06/2014</string>
+    <string name="ends_on">Ends on:</string>
+    <string name="ends_on_mock">11:55 AM 23/03/2015</string>
+    <string name="file_size">File size:</string>
+    <string name="file_size_mock">12,5 Mb</string>
+    <string name="file_last_modified">Last modified:</string>
+    <string name="file_last_modified_mock">11:55 AM 23/03/2015</string>
+    <string name="process_found">Process found:</string>
+    <string name="process_found_mock">No process was found</string>
+    <string name="process_count">Process count</string>
+    <string name="process_count_mock">--------</string>
+    <string name="next">next  >>></string>
+    <string name="object_analyze_descr">Object analyze could be used to describe technical processes of IS. Allows user to find bottlenecks in processes of ITS related to objects, dependencies between objects, fluence of each objects on process.</string>
+    <string name="user_analyze_descr">User analyze could be used to describe social net of IS. Allows user to find bottlenecks in processes of ITS related to users, dependencies between users, user's hierarchy, fluence of user on process.</string>
+    <string name="object_user_analyze_descr">Object|User analyze could be used to describe technical processes of IS under user's interactions. Allow user to apply more filters fir analyze and so on.</string>
+    <string name="click_to_analyze_only_objects"> > Click to analyze only objects</string>
+    <string name="click_to_analyze_only_users"> > Click to analyze only users</string>
+    <string name="click_to_analyze_both_objects_and_users"> > Click to analyze both objects and users</string>
+</resources>
