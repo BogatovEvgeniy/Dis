@@ -15,7 +15,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Method2Activity$Method1Activity"
+        <activity android:name=".Method1Activity"
             android:screenOrientation="portrait"/>
         <activity android:name=".Method2Activity"
             android:screenOrientation="portrait"/>
