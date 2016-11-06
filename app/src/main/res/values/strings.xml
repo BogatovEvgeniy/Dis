@@ -46,5 +46,5 @@
     <string name="founded_processes">Founded processes:</string>
     <string name="min_rule_length_mock">2</string>
     <string name="export_results">Export search results</string>
-    <string name="save_lof_in_file_system"><![CDATA[Save log in file system >>>]]></string>
+    <string name="save_lof_in_file_system"><![CDATA[Save structured log in file system >>>]]></string>
 </resources>
