@@ -30,9 +30,11 @@ public abstract class LogParser {
         } catch (Exception e) {
             logParsingListener.onValidationError(e);
         }
-        logParsingListener.onValidationFinish();
     }
 
     protected abstract void parseLog() throws Exception;
 
+    public BPLog getLog() {
+        return log;
+    }
 }

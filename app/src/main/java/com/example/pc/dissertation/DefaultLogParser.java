@@ -3,11 +3,12 @@ package com.example.pc.dissertation;
 import android.os.Handler;
 import android.os.HandlerThread;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.io.InputStreamReader;
 
 /**
  * Created by PC on 26.11.2016.
@@ -15,6 +16,7 @@ import java.util.regex.Pattern;
 public class DefaultLogParser extends LogParser {
 
     private static final java.lang.String PARSER_THREAD = "parser_thread";
+    public static final String LINE_SEPARATOR = "/n";
 
     public DefaultLogParser(LogParsingListener logParsingListener) {
         super(logParsingListener);
@@ -26,49 +28,43 @@ public class DefaultLogParser extends LogParser {
         handlerThread.start();
         Handler handler = new Handler(handlerThread.getLooper());
         handler.postAtFrontOfQueue(new Runnable() {
-                                       @Override
-                                       public void run() {
-                                           File file = new File(log.getFilePath());
+            @Override
+            public void run() {
+                File file = new File(log.getFilePath());
+                BPLog.LogStructureBuilder rawStuctBuilder = new BPLog.LogStructureBuilder();
+                if (file.exists()) {
+                    try {
+                        BufferedReader fis = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+                        String lastReadLine;
+                        while ((lastReadLine = fis.readLine()).length() > 0) {
+                            int lastFoundLineSeparatorIndex = 0;
+                            while(lastFoundLineSeparatorIndex != -1){
+                                String parseData = lastReadLine.substring(lastFoundLineSeparatorIndex, lastReadLine.length());
+                                lastFoundLineSeparatorIndex = parseInLineElements(rawStuctBuilder, parseData);
+                                rawStuctBuilder.addLine();
+                            }
+                        }
+                        DefaultLogParser.this.getLog().setRawLog(rawStuctBuilder.build());
+                        logParsingListener.onValidationFinish();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
 
-                                           if (file.exists()) {
-                                               IOException exception = null;
-                                               try {
-                                                   FileInputStream fis = new FileInputStream(file);
-                                                   int bufferLength = 1024;
-                                                   byte[] buffer = new byte[bufferLength];
-                                                   int offset = 0;
-                                                   int readSymbols;
-                                                   while ((readSymbols = fis.read(buffer, offset, bufferLength)) > 0) {
-                                                                                                              // Search patterns
-                                                       Pattern elementPattern = Pattern.compile("[" + elementSeparator + "]");
-                                                       Pattern lineEndPattern = Pattern.compile("[" + lineSeparator + "]");
+    private int parseInLineElements(BPLog.LogStructureBuilder rawStuctBuilder, String lastReadLine) {
+        int elementOffset = 0;
+        int lastFoundElementSymbIndex = 0;
+        // TODO suppose that this line separator was used
+        int lastFoundLineSeparator = lastReadLine.indexOf(LINE_SEPARATOR);
+        while (lastFoundElementSymbIndex < lastFoundLineSeparator){
+            int elementSeparatorIndex = lastReadLine.indexOf(elementSeparator, elementOffset);
+            rawStuctBuilder.addElement(lastReadLine.substring(elementOffset, elementSeparatorIndex));
+            elementOffset = elementSeparatorIndex + 1;
+        }
 
-                                                       // Matchers
-                                                       Matcher lineMatcher = lineEndPattern.matcher(new String(buffer));
-                                                       Matcher elementMatcher = lineEndPattern.matcher(new String(buffer));
-
-                                                       //Search algorithm
-                                                       int elementOffsetIndex = 0;
-                                                       int lineOffsetIndex = lineMatcher.start();
-                                                       int newElementOffsetIndex = 0;
-                                                       while ((newElementOffsetIndex = elementMatcher.start(elementOffsetIndex)) < lineOffsetIndex) {
-
-                                                       }
-
-                                                   }
-
-                                               }
-                                           }catch(IOException e){
-                                               exception = e;
-                                               e.printStackTrace();
-                                           }finally{
-                                               if (exception != null) {
-                                                   logParsingListener.onValidationError(exception);
-                                               }
-                                           }
-                                       }
-                                   }
-
-        );
+        return lastFoundLineSeparator;
     }
 }

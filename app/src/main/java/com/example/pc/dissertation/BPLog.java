@@ -47,6 +47,36 @@ public class BPLog {
         this.seKnowledgeMap.put(logStructElem, elementKnowledge);
     }
 
+    public void setRawLog(List<List<String>> rawLog) {
+        this.rawLog = rawLog;
+    }
+
+    public static class LogStructureBuilder {
+        List<List<String>> rawLog = new ArrayList<>();
+        List<String> currentLine = new ArrayList<>();
+        private int elementsCountInRow;
+
+        void addElement(String element) {
+            currentLine.add(element);
+        }
+
+        void addLine() {
+            if (elementsCountInRow == 0) {
+                elementsCountInRow = currentLine.size();
+            } else {
+                if (currentLine.size() == elementsCountInRow) {
+                    throw new IllegalArgumentException("New line size doesn't equals to previous lines");
+                }
+            }
+            currentLine.clear();
+            rawLog.add(currentLine);
+        }
+
+        List<List<String>> build(){
+            return  rawLog;
+        }
+    }
+
 
     public String getFilePath() {
         return filePath;
