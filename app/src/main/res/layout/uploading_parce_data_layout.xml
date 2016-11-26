@@ -37,95 +37,6 @@
             android:text="@string/log_name_mock"
             android:textSize="16sp" />
 
-        <TextView
-            android:layout_width="120dp"
-            android:layout_height="48dp"
-            android:gravity="center_vertical"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:text="@string/process_found"
-            android:textSize="16sp" />
-
-        <TextView
-            android:layout_height="48dp"
-            android:layout_gravity="fill_horizontal"
-            android:gravity="center_vertical"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:text="@string/process_found_mock"
-            android:textSize="16sp" />
-
-        <TextView
-            android:layout_width="120dp"
-            android:layout_height="48dp"
-            android:gravity="center_vertical"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:text="@string/process_count"
-            android:textSize="16sp" />
-
-        <TextView
-            android:layout_height="48dp"
-            android:layout_gravity="fill_horizontal"
-            android:gravity="center_vertical"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:text="@string/process_count_mock"
-            android:textSize="16sp" />
-
-        <TextView
-            android:layout_width="120dp"
-            android:layout_height="48dp"
-            android:gravity="center_vertical"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:text="@string/events_count"
-            android:textSize="16sp" />
-
-        <TextView
-            android:layout_height="48dp"
-            android:layout_gravity="fill_horizontal"
-            android:gravity="center_vertical"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:text="@string/filtered_events_count_mock"
-            android:textSize="16sp" />
-
-        <TextView
-            android:layout_width="120dp"
-            android:layout_height="48dp"
-            android:gravity="center_vertical"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:text="@string/starts_from"
-            android:textSize="16sp" />
-
-        <TextView
-            android:layout_height="48dp"
-            android:layout_gravity="fill_horizontal"
-            android:gravity="center_vertical"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:text="@string/starts_on_mock"
-            android:textSize="16sp" />
-
-        <TextView
-            android:layout_width="120dp"
-            android:layout_height="48dp"
-            android:gravity="center_vertical"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:text="@string/ends_on"
-            android:textSize="16sp" />
-
-        <TextView
-            android:layout_height="48dp"
-            android:layout_gravity="fill_horizontal"
-            android:gravity="center_vertical"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:text="@string/ends_on_mock"
-            android:textSize="16sp" />
 
         <TextView
             android:layout_width="120dp"
@@ -164,11 +75,98 @@
             android:textSize="16sp" />
     </GridLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:text="Element separator"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/elementSeparatorSymb"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="fill_horizontal"
+            android:gravity="center"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:text=";"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="120dp"
+            android:layout_height="48dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:text="Line Separator"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/lineSeparatorSymb"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="fill_horizontal"
+            android:gravity="center"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:text="/n"
+            android:textSize="16sp" />
+
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/button_parse"
+        android:layout_width="144dp"
+        android:layout_height="48dp"
+        android:layout_gravity="right"
+        android:gravity="center"
+        android:text="Parse" />
+
+    <include layout="@layout/divider" />
+
+    <include
+        layout="@layout/progress"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <HorizontalScrollView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <FrameLayout
+                    android:id="@+id/logFrame"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/black" />
+            </LinearLayout>
+        </HorizontalScrollView>
+    </ScrollView>
+
+    <include layout="@layout/divider" />
+
     <Button
         android:id="@+id/button_next"
         android:layout_width="144dp"
         android:layout_height="48dp"
-        android:layout_marginBottom="16dp"
         android:layout_gravity="right"
         android:gravity="center"
         android:text="@string/next" />

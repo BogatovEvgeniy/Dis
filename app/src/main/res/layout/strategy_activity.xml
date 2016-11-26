@@ -13,17 +13,14 @@
         android:textSize="24sp"
         android:textStyle="bold|italic" />
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/black" />
+    <include layout="@layout/divider" />
 
     <TextView
         android:id="@+id/object_analyze"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="16dp"
         android:paddingLeft="16dp"
+        android:paddingTop="16dp"
         android:text="@string/click_to_analyze_only_objects"
         android:textSize="20sp"
         android:textStyle="bold" />
@@ -38,17 +35,14 @@
         android:textSize="16sp"
         android:textStyle="italic" />
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/black" />
+    <include layout="@layout/divider" />
 
     <TextView
         android:id="@+id/user_analyze"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="16dp"
         android:paddingLeft="16dp"
+        android:paddingTop="16dp"
         android:text="@string/click_to_analyze_only_users"
         android:textSize="20sp"
         android:textStyle="bold" />
@@ -63,17 +57,14 @@
         android:textSize="16sp"
         android:textStyle="italic" />
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/black" />
+    <include layout="@layout/divider" />
 
     <TextView
         android:id="@+id/object_users_analyze"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="16dp"
         android:paddingLeft="16dp"
+        android:paddingTop="16dp"
         android:text="@string/click_to_analyze_both_objects_and_users"
         android:textSize="20sp"
         android:textStyle="bold" />
@@ -88,9 +79,6 @@
         android:textSize="16sp"
         android:textStyle="italic" />
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/black" />
+    <include layout="@layout/divider" />
 
 </LinearLayout>
