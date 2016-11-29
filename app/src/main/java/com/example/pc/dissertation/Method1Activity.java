@@ -4,12 +4,12 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -30,7 +30,6 @@ public class Method1Activity extends AppCompatActivity {
     private static final java.lang.String GET_FILE_THREAD_NAME = "GET_FILE_BY_URI";
     private FrameLayout logFrame;
     private BPLog log;
-    private LogParser logParser = new DefaultLogParser(new LogParsingListenerImpl(this));
     private LinearLayout progressLayout;
     private String elementSeparator;
     private String lineSeparator;
@@ -44,8 +43,8 @@ public class Method1Activity extends AppCompatActivity {
         findViewById(R.id.button_next).setOnClickListener(onNextBtnClick());
         findViewById(R.id.button_parse).setOnClickListener(onParseBtnClick());
         findViewById(R.id.get_file_button).setOnClickListener(onGetFileBtnClick());
-        elementSeparatorEt = ((TextView)findViewById(R.id.elementSeparatorSymb));
-        lineSeparatorEt = ((TextView)findViewById(R.id.lineSeparatorSymb));
+        elementSeparatorEt = ((TextView) findViewById(R.id.elementSeparatorSymb));
+        lineSeparatorEt = ((TextView) findViewById(R.id.lineSeparatorSymb));
         progressLayout = (LinearLayout) findViewById(R.id.progress);
         logFrame = (FrameLayout) findViewById(R.id.logFrame);
     }
@@ -57,7 +56,8 @@ public class Method1Activity extends AppCompatActivity {
                 elementSeparator = elementSeparatorEt.getText().toString();
                 lineSeparator = lineSeparatorEt.getText().toString();
                 if (elementSeparator != null && lineSeparator != null) {
-                    logParser.startParsing(log, elementSeparator, lineSeparator);
+                    DefaultParseService.beforeParse(new LogParsingListenerImpl(Method1Activity.this), log, elementSeparator, lineSeparator);
+                    startService(new Intent(Method1Activity.this, DefaultParseService.class));
                 }
             }
         };
@@ -92,7 +92,7 @@ public class Method1Activity extends AppCompatActivity {
         return permissionState == PackageManager.PERMISSION_GRANTED;
     }
 
-    private void getFile() {
+    private void getFile() {new Intent(this, DefaultParseService.class);
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
         intent.setType("file/*");
@@ -120,7 +120,7 @@ public class Method1Activity extends AppCompatActivity {
                 Log.d(getPackageName(), data.getExtras().toString());
             } else {
                 File file = new File(data.getData().getPath());
-                log = new BPLog(file);
+                log = new BPLog(file.getPath());
             }
         }
     }
@@ -147,20 +147,25 @@ public class Method1Activity extends AppCompatActivity {
             defaultProcessingForCallback("Processing error", false);
         }
 
-        private void defaultProcessingForCallback(String logMessage, boolean showProgress) {
-            Method1Activity method1Activity = weakRef.get();
-            if (method1Activity == null) {
-                return;
-            }
+        private void defaultProcessingForCallback(final String logMessage, final boolean showProgress) {
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    Method1Activity method1Activity = weakRef.get();
+                    if (method1Activity == null) {
+                        return;
+                    }
 
-            if (showProgress) {
-                method1Activity.startProgress();
-            } else {
-                method1Activity.stopProgress();
-            }
+                    if (showProgress) {
+                        method1Activity.startProgress();
+                    } else {
+                        method1Activity.stopProgress();
+                    }
 
-            Toast.makeText(method1Activity, logMessage, Toast.LENGTH_LONG);
-            Log.d(method1Activity.getPackageName(), logMessage);
+                    Toast.makeText(method1Activity, logMessage, Toast.LENGTH_LONG);
+                    Log.d(method1Activity.getPackageName(), logMessage);
+                }
+            });
         }
     }
 

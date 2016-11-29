@@ -25,6 +25,7 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".StrategySetUpActivity"
             android:screenOrientation="portrait"/>
+        <service android:name=".DefaultParseService"/>
     </application>
 
 </manifest>

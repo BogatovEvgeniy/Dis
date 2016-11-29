@@ -57,6 +57,7 @@ public class BPLog {
         private int elementsCountInRow;
 
         void addElement(String element) {
+            System.out.println("Add element:" + element + " in line:" + rawLog.size() + 1);
             currentLine.add(element);
         }
 
@@ -69,11 +70,12 @@ public class BPLog {
                 }
             }
             currentLine.clear();
+            System.out.println("Add line:" + (rawLog.size() + 1) + " with elements:" + currentLine.toString());
             rawLog.add(currentLine);
         }
 
-        List<List<String>> build(){
-            return  rawLog;
+        List<List<String>> build() {
+            return rawLog;
         }
     }
 
