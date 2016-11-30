@@ -1,7 +1,10 @@
-package com.example.pc.dissertation;
+package com.example.pc.dissertation.services;
 
 import android.app.IntentService;
 import android.content.Intent;
+
+import com.example.pc.dissertation.BPLog;
+import com.example.pc.dissertation.LogParsingListener;
 
 /**
  * Created by PC on 26.11.2016.
@@ -38,6 +41,7 @@ public abstract class ParseService extends IntentService{
         logParsingListener.onValidationStart();
         try {
             parseLog();
+
         } catch (Exception e) {
             logParsingListener.onValidationError(e);
         }

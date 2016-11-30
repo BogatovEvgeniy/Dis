@@ -1,5 +1,7 @@
 package com.example.pc.dissertation;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -56,25 +58,25 @@ public class BPLog {
         List<String> currentLine = new ArrayList<>();
         private int elementsCountInRow;
 
-        void addElement(String element) {
-            System.out.println("Add element:" + element + " in line:" + rawLog.size() + 1);
+        public void addElement(String element) {
+            Log.d(BPLog.class.getName(), "Add element:" + element + " in line:" + rawLog.size() + 1);
             currentLine.add(element);
         }
 
-        void addLine() {
+        public void addLine() {
             if (elementsCountInRow == 0) {
                 elementsCountInRow = currentLine.size();
             } else {
-                if (currentLine.size() == elementsCountInRow) {
+                if (currentLine.size() != elementsCountInRow) {
                     throw new IllegalArgumentException("New line size doesn't equals to previous lines");
                 }
             }
-            currentLine.clear();
-            System.out.println("Add line:" + (rawLog.size() + 1) + " with elements:" + currentLine.toString());
+            Log.d(BPLog.class.getName(), "Add line:" + (rawLog.size() + 1) + " with elements:" + currentLine.toString());
             rawLog.add(currentLine);
+            currentLine.clear();
         }
 
-        List<List<String>> build() {
+        public List<List<String>> build() {
             return rawLog;
         }
     }

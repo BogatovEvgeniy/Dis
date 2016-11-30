@@ -1,14 +1,19 @@
-package com.example.pc.dissertation;
+package com.example.pc.dissertation.services;
 
 import android.content.Intent;
 import android.os.Handler;
 import android.os.HandlerThread;
+
+import com.example.pc.dissertation.AppApplication;
+import com.example.pc.dissertation.BPLog;
+import com.example.pc.dissertation.db.tables.EventsDAO;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
 
 /**
  * Created by PC on 26.11.2016.
@@ -50,7 +55,9 @@ public class DefaultParseService extends ParseService {
                             parseInRecordElements(rawStuctBuilder, currentRecord);
                             rawStuctBuilder.addLine();
                         }
-                        DefaultParseService.this.getLog().setRawLog(rawStuctBuilder.build());
+                        List<List<String>> rawLog = rawStuctBuilder.build();
+                        DefaultParseService.this.getLog().setRawLog(rawLog);
+                        EventsDAO.insert(rawLog);
                         logParsingListener.onValidationFinish();
                     } catch (IOException e) {
                         e.printStackTrace();
