@@ -7,6 +7,8 @@ import android.os.HandlerThread;
 import com.example.pc.dissertation.AppApplication;
 import com.example.pc.dissertation.BPLog;
 import com.example.pc.dissertation.db.tables.EventsDAO;
+import com.example.pc.dissertation.db.tables.RawLodTableDAO;
+import com.example.pc.dissertation.db.tables.RawLogTable;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -57,7 +59,7 @@ public class DefaultParseService extends ParseService {
                         }
                         List<List<String>> rawLog = rawStuctBuilder.build();
                         DefaultParseService.this.getLog().setRawLog(rawLog);
-                        EventsDAO.insert(rawLog);
+                        storeRawLogInDB(rawLog);
                         logParsingListener.onValidationFinish();
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -65,6 +67,13 @@ public class DefaultParseService extends ParseService {
                 }
             }
         });
+    }
+
+    private void storeRawLogInDB(List<List<String>> rawLog) {
+        AppApplication.getWritableDBInstance().execSQL(RawLogTable.getInstance(rawLog).getCreateStatement());
+        for (List<String> row : rawLog){
+            RawLodTableDAO.insert(row);
+        }
     }
 
     private void parseInRecordElements(BPLog.LogStructureBuilder rawStuctBuilder, String parseLine) {

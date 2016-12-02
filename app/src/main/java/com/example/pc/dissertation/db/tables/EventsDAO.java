@@ -32,23 +32,30 @@ public class EventsDAO {
     //    public static String STATUS_ID = "status_id";
     public static String STATUS = "status";
 
-    public static void insert(List<List<String>> rawLog){
+    public static void insert(List<String> logEvent) {
         SQLiteDatabase writableDBInstance = AppApplication.getWritableDBInstance();
-        writableDBInstance.beginTransaction();
         ContentValues content_values = new ContentValues();
-        for (List<String> logEvent : rawLog) {
-            content_values.put(EventsTable._ID, logEvent.get(0));
-            content_values.put(EventsTable.PROCESS, logEvent.get(1));
-            content_values.put(EventsTable.USER, logEvent.get(2));
-            content_values.put(EventsTable.USER_ROLE, logEvent.get(3));
-            content_values.put(EventsTable.OBJECT, logEvent.get(4));
-            content_values.put(EventsTable.TIMESTAMP, logEvent.get(5));
-            content_values.put(EventsTable.STATUS, logEvent.get(6));
-            writableDBInstance.insert(EventsTable.TABLE_NAME, TABLE_COLUMS_LIST, content_values)
-        }
+        content_values.put(EventsTable._ID, logEvent.get(0));
+        content_values.put(EventsTable.PROCESS, logEvent.get(1));
+        content_values.put(EventsTable.USER, logEvent.get(2));
+        content_values.put(EventsTable.USER_ROLE, logEvent.get(3));
+        content_values.put(EventsTable.OBJECT, logEvent.get(4));
+        content_values.put(EventsTable.TIMESTAMP, logEvent.get(5));
+        content_values.put(EventsTable.STATUS, logEvent.get(6));
+        writableDBInstance.insert(EventsTable.TABLE_NAME, TABLE_COLUMS_LIST, content_values);
     }
 
-    public static void select(){
+    public static void select(String rowID) {
+        SQLiteDatabase writableDBInstance = AppApplication.getWritableDBInstance();
+        ContentValues content_values = new ContentValues();
+        content_values.put(EventsTable._ID, rowID);
+        writableDBInstance.insert(EventsTable.TABLE_NAME, TABLE_COLUMS_LIST, content_values);
+    }
 
+    public static void delete(String rowID) {
+        SQLiteDatabase writableDBInstance = AppApplication.getWritableDBInstance();
+        ContentValues content_values = new ContentValues();
+        content_values.put(EventsTable._ID, rowID);
+        writableDBInstance.insert(EventsTable.TABLE_NAME, TABLE_COLUMS_LIST, content_values);
     }
 }
