@@ -1,5 +1,7 @@
 package com.example.pc.dissertation.db.tables;
 
+import com.example.pc.dissertation.AppApplication;
+
 import java.util.List;
 
 /**
@@ -28,15 +30,29 @@ public class RawLogTable extends DBTable {
 
     @Override
     public String getCreateStatement() {
+      if (isExists()){
+          AppApplication.getWritableDBInstance().execSQL(getDeleteStatement());
+      }
         StringBuffer sb = new StringBuffer();
         sb.append(  "CREATE TABLE " + TABLE_NAME + " (" + _ID + " INTEGER PRIMARY KEY,");
         sb.append(ELEMENT_PREFFIX + 0 + " TEXT");
         for (int i = 1; i < rawLog.get(0).size(); i++){
             sb.append(", " + ELEMENT_PREFFIX + i + " TEXT");
         }
+        sb.append(")");
         COLUMNS_COUNT = rawLog.get(0).size();
+
         return sb.toString();
     }
+
+    private boolean isExists() {
+        try {
+            return RawLodTableDAO.readAll() > 0;
+        } catch (Exception e){
+            return false;
+        }
+    }
+
 
     @Override
     public String getDeleteStatement() {

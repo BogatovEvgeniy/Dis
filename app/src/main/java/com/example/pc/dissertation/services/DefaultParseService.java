@@ -74,6 +74,8 @@ public class DefaultParseService extends ParseService {
         for (List<String> row : rawLog){
             RawLodTableDAO.insert(row);
         }
+
+        RawLodTableDAO.readAll();
     }
 
     private void parseInRecordElements(BPLog.LogStructureBuilder rawStuctBuilder, String parseLine) {

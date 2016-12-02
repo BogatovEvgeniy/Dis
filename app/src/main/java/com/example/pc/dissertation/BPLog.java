@@ -3,6 +3,8 @@ package com.example.pc.dissertation;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -59,7 +61,8 @@ public class BPLog {
         private int elementsCountInRow;
 
         public void addElement(String element) {
-            Log.d(BPLog.class.getName(), "Add element:" + element + " in line:" + rawLog.size() + 1);
+
+            Log.d(BPLog.class.getName(), "Add element:" + element + " in line:" + (rawLog.size() + 1));
             currentLine.add(element);
         }
 
@@ -73,7 +76,7 @@ public class BPLog {
             }
             Log.d(BPLog.class.getName(), "Add line:" + (rawLog.size() + 1) + " with elements:" + currentLine.toString());
             rawLog.add(currentLine);
-            currentLine.clear();
+            currentLine = new ArrayList<>();
         }
 
         public List<List<String>> build() {
