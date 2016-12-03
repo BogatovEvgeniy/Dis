@@ -47,7 +47,7 @@ public class RawLogTable extends DBTable {
 
     private boolean isExists() {
         try {
-            return RawLodTableDAO.readAll() > 0;
+            return RawLodTableDAO.readAllRows().getCount() > 0;
         } catch (Exception e){
             return false;
         }

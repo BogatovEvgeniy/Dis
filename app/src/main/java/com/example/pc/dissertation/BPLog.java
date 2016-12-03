@@ -89,7 +89,12 @@ public class BPLog {
         return filePath;
     }
 
-    private enum LogStructElem {
+    public enum LogStructElem {
         CUSTOM, PROCESS, ACTIVITY, EVENT, USER, USER_ROLE, OBJECT, TIMESTAMP, STATUS;
+
+        @Override
+        public String toString() {
+            return name();
+        }
     }
 }

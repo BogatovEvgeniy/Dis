@@ -21,20 +21,16 @@ public class RawLodTableDAO {
         AppApplication.getWritableDBInstance().insert(RawLogTable.TABLE_NAME, null, contentValues);
     }
 
-    public static int readAll() {
-        Cursor cursor = AppApplication.getWritableDBInstance().rawQuery("SELECT * FROM " + RawLogTable.TABLE_NAME, null);
+    public static Cursor readAllRows() {
+        return AppApplication.getWritableDBInstance().rawQuery("SELECT * FROM " + RawLogTable.TABLE_NAME, null);
+    }
 
-        if (cursor.moveToFirst()) {
-            String[] columnNames = cursor.getColumnNames();
-            do {
-                StringBuffer stringBuffer = new StringBuffer();
-                for (int i =  0; i < columnNames.length; i++) {
-                    stringBuffer.append("COL NAME:" + i + " has value:" + cursor.getString(i));
-                    stringBuffer.append(" | ");
-                }
-                Log.d("DB SCREEN", stringBuffer.toString());
-            } while (cursor.moveToNext());
+    private static void printLineInLog(Cursor cursor, String[] columnNames) {
+        StringBuffer stringBuffer = new StringBuffer();
+        for (int i =  0; i < columnNames.length; i++) {
+            stringBuffer.append("COL NAME:" + i + " has value:" + cursor.getString(i));
+            stringBuffer.append(" | ");
         }
-        return cursor.getCount();
+        Log.d("DB SCREEN", stringBuffer.toString());
     }
 }

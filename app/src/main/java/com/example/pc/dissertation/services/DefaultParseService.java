@@ -6,7 +6,7 @@ import android.os.HandlerThread;
 
 import com.example.pc.dissertation.AppApplication;
 import com.example.pc.dissertation.BPLog;
-import com.example.pc.dissertation.db.tables.EventsDAO;
+import com.example.pc.dissertation.LogParsingListener;
 import com.example.pc.dissertation.db.tables.RawLodTableDAO;
 import com.example.pc.dissertation.db.tables.RawLogTable;
 
@@ -23,7 +23,6 @@ import java.util.List;
 public class DefaultParseService extends ParseService {
 
     private static final java.lang.String PARSER_THREAD = "parser_thread";
-    public static final String LINE_SEPARATOR = "/n";
 
     public DefaultParseService() {
         super(DefaultParseService.class.getName());
@@ -71,11 +70,9 @@ public class DefaultParseService extends ParseService {
 
     private void storeRawLogInDB(List<List<String>> rawLog) {
         AppApplication.getWritableDBInstance().execSQL(RawLogTable.getInstance(rawLog).getCreateStatement());
-        for (List<String> row : rawLog){
+        for (List<String> row : rawLog) {
             RawLodTableDAO.insert(row);
         }
-
-        RawLodTableDAO.readAll();
     }
 
     private void parseInRecordElements(BPLog.LogStructureBuilder rawStuctBuilder, String parseLine) {
@@ -90,7 +87,7 @@ public class DefaultParseService extends ParseService {
             } else {
                 element = parseLine.substring(elementOffset, newFoundElementSeparatorIndex);
             }
-            rawStuctBuilder.addElement(element.trim());
+            rawStuctBuilder.addElement(element);
             elementOffset = newFoundElementSeparatorIndex + 1;
             lastFoundElementSeparator = newFoundElementSeparatorIndex;
         }
