@@ -16,12 +16,16 @@ import com.example.pc.dissertation.BPLog;
 import com.example.pc.dissertation.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by PC on 03.12.2016.
  */
 public class RawLogCursorAdapter extends CursorAdapter {
+
+    private Map<Integer, String> elementTypeColumnMap = new HashMap<>();
 
     public RawLogCursorAdapter(Context context, Cursor c, boolean autoRequery) {
         super(context, c, autoRequery);
@@ -61,7 +65,9 @@ public class RawLogCursorAdapter extends CursorAdapter {
         spinnerView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+                Integer columnNum = (Integer) view.getTag();
+                BPLog.LogStructElem elem = BPLog.LogStructElem.values()[position];
+                elementTypeColumnMap.put(columnNum, elem.toString());
             }
 
             @Override
@@ -87,6 +93,10 @@ public class RawLogCursorAdapter extends CursorAdapter {
                 viewHolder.spinnerViewList.get(i).setVisibility(View.GONE);
             }
         }
+    }
+
+    Map<Integer,String> getElementColumnMap(){
+        return elementTypeColumnMap;
     }
 
     class ViewHolder {
