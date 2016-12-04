@@ -7,15 +7,16 @@
 
     <Spinner
         android:id="@+id/structElement"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="150dp"
+        android:layout_height="24dp"
         android:visibility="gone">
     </Spinner>
 
     <TextView
         android:id="@+id/elementView"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="24dp"
+        android:ellipsize="end"
         android:hint="anElement"
         android:textSize="16sp" />
 </LinearLayout>

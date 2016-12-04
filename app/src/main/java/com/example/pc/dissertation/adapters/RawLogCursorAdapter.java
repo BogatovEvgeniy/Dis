@@ -35,6 +35,8 @@ public class RawLogCursorAdapter extends CursorAdapter {
         for (int i = 0; i < cursor.getColumnNames().length; i++) {
             LinearLayout linearLayout = (LinearLayout) layoutInflater.inflate(R.layout.row_element, null);
             rowLayout.addView(linearLayout);
+            View dividerLayout = layoutInflater.inflate(R.layout.list_horizontal_devider, null);
+            rowLayout.addView(dividerLayout);
 
             TextView elementTextView = (TextView) linearLayout.findViewById(R.id.elementView);
             Spinner spinnerView = (Spinner) linearLayout.findViewById(R.id.structElement);
@@ -43,6 +45,7 @@ public class RawLogCursorAdapter extends CursorAdapter {
             viewHolder.elementsViewList.add(elementTextView);
             viewHolder.spinnerViewList.add(spinnerView);
         }
+
         rowLayout.setTag(viewHolder);
         return rowLayout;
     }
@@ -74,12 +77,14 @@ public class RawLogCursorAdapter extends CursorAdapter {
         ViewHolder viewHolder = (ViewHolder) view.getTag();
         for (int i = 0; i < viewHolder.elementsViewList.size(); i++) {
             viewHolder.elementsViewList.get(i).setText(cursor.getString(i));
-            if (i == 0) {
+            if (cursor.isFirst()) {
+                if (i == 0) {
+                    viewHolder.spinnerViewList.get(i).setVisibility(View.GONE);
+                } else {
+                    viewHolder.spinnerViewList.get(i).setVisibility(View.VISIBLE);
+                }
+            } else {
                 viewHolder.spinnerViewList.get(i).setVisibility(View.GONE);
-            }
-
-            if (cursor.isFirst() && i > 0) {
-                viewHolder.spinnerViewList.get(i).setVisibility(View.VISIBLE);
             }
         }
     }
