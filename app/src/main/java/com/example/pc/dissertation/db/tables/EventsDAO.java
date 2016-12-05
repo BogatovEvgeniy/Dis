@@ -1,6 +1,7 @@
 package com.example.pc.dissertation.db.tables;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.pc.dissertation.AppApplication;
@@ -32,17 +33,25 @@ public class EventsDAO {
     //    public static String STATUS_ID = "status_id";
     public static String STATUS = "status";
 
-    public static void insert(List<String> logEvent) {
+    // TODO could be replaced with some builder to prevent bugs and organize code in a better way
+    public static void insert(String process, String user, String userRole, String object, String timestamp, String status) {
         SQLiteDatabase writableDBInstance = AppApplication.getWritableDBInstance();
-        ContentValues content_values = new ContentValues();
-        content_values.put(EventsTable._ID, logEvent.get(0));
-        content_values.put(EventsTable.PROCESS, logEvent.get(1));
-        content_values.put(EventsTable.USER, logEvent.get(2));
-        content_values.put(EventsTable.USER_ROLE, logEvent.get(3));
-        content_values.put(EventsTable.OBJECT, logEvent.get(4));
-        content_values.put(EventsTable.TIMESTAMP, logEvent.get(5));
-        content_values.put(EventsTable.STATUS, logEvent.get(6));
-        writableDBInstance.insert(EventsTable.TABLE_NAME, TABLE_COLUMS_LIST, content_values);
+        ContentValues contentValues = new ContentValues();
+        insertValue(contentValues,EventsTable.PROCESS, process);
+        insertValue(contentValues,EventsTable.USER, user);
+        insertValue(contentValues,EventsTable.USER_ROLE, userRole);
+        insertValue(contentValues,EventsTable.OBJECT, object);
+        insertValue(contentValues,EventsTable.TIMESTAMP, timestamp);
+        insertValue(contentValues,EventsTable.STATUS, status);
+        writableDBInstance.insert(EventsTable.TABLE_NAME, TABLE_COLUMS_LIST, contentValues);
+    }
+
+    private static void insertValue(ContentValues contentValues, String column, String value) {
+        if (value == null){
+            contentValues.putNull(column);
+        } else {
+            contentValues.put(column, value);
+        }
     }
 
     public static void select(String rowID) {
@@ -57,5 +66,9 @@ public class EventsDAO {
         ContentValues content_values = new ContentValues();
         content_values.put(EventsTable._ID, rowID);
         writableDBInstance.insert(EventsTable.TABLE_NAME, TABLE_COLUMS_LIST, content_values);
+    }
+
+    public static Cursor getAllRows() {
+        return AppApplication.getWritableDBInstance().rawQuery("SELECT * FROM " + EventsTable.TABLE_NAME, null);
     }
 }

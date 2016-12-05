@@ -12,14 +12,26 @@ import java.util.Map;
  * Created by PC on 26.11.2016.
  */
 public class BPLog {
+    private static BPLog INSTANCE;
+
     private String filePath;
     private LogParsingListener logParsingListener;
     private Map<LogStructElem, List<String>> seKnowledgeMap;
     private Map<LogStructElem, List<String>> log;
     private List<List<String>> rawLog;
 
-    public BPLog(String filePath) {
+    private BPLog() {
+    }
+
+    private BPLog(String filePath) {
         this.filePath = filePath;
+    }
+
+    public static BPLog getInstance() {
+        if (INSTANCE == null) {
+            throw new IllegalStateException("The instance was not initiated. Call BPLog.init(String filePath) before");
+        }
+        return INSTANCE;
     }
 
     public Map<LogStructElem, List<String>> getKnowledgeMap() {
@@ -53,6 +65,15 @@ public class BPLog {
 
     public void setRawLog(List<List<String>> rawLog) {
         this.rawLog = rawLog;
+    }
+
+    public static BPLog init(String path) {
+        if (INSTANCE == null) {
+            INSTANCE = new BPLog(path);
+        } else {
+            throw new IllegalStateException("The instance was initiated before.");
+        }
+        return INSTANCE;
     }
 
     public static class LogStructureBuilder {

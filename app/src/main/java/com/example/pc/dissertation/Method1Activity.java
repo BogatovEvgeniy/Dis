@@ -28,6 +28,8 @@ import com.example.pc.dissertation.services.DefaultParseService;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by PC on 05.11.2016.
@@ -37,6 +39,7 @@ public class Method1Activity extends AppCompatActivity {
     private static final int REQUEST_CODE_GET_LOG_FILE = 0x0001;
     private static final int REQUEST_STORAGE_PERM_CODE = 0x0002;
     private static final java.lang.String GET_FILE_THREAD_NAME = "GET_FILE_BY_URI";
+    public static final String ELEMENTS_COLUMN_MAP = "ELEMENTS_COLUMN_MAP";
     private ListView rawLogView;
     private BPLog log;
     private LinearLayout progressLayout;
@@ -45,6 +48,7 @@ public class Method1Activity extends AppCompatActivity {
     private TextView elementSeparatorEt;
     private TextView lineSeparatorEt;
     private HorizontalScrollView horizontalScrollView;
+    private RawLogCursorAdapter rawLogAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +83,14 @@ public class Method1Activity extends AppCompatActivity {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(Method1Activity.this, SelectStrategyActivity.class));
+                if (rawLogAdapter != null) {
+                    Map<String, Integer> elementColumnMap = rawLogAdapter.getElementColumnMap();
+                    Intent intent = new Intent(Method1Activity.this, SelectStrategyActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(ELEMENTS_COLUMN_MAP, (HashMap)elementColumnMap);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }
             }
         };
     }
@@ -131,7 +142,7 @@ public class Method1Activity extends AppCompatActivity {
                 Log.d(getPackageName(), data.getExtras().toString());
             } else {
                 File file = new File(data.getData().getPath());
-                log = new BPLog(file.getPath());
+                log = BPLog.init(file.getPath());
             }
         }
     }
@@ -161,10 +172,10 @@ public class Method1Activity extends AppCompatActivity {
                     Toast.makeText(method1Activity, "Processing done", Toast.LENGTH_LONG);
                     Log.d(method1Activity.getPackageName(), "Processing done");
 
-
                     //TODO use cursor instead uploading data by pages.
                     Cursor cursor = RawLodTableDAO.readAllRows();
-                    method1Activity.rawLogView.setAdapter(new RawLogCursorAdapter(method1Activity, cursor, true));
+                    method1Activity.rawLogAdapter = new RawLogCursorAdapter(method1Activity, cursor, true);
+                    method1Activity.rawLogView.setAdapter(method1Activity.rawLogAdapter);
                     method1Activity.horizontalScrollView.invalidate();
                 }
             });

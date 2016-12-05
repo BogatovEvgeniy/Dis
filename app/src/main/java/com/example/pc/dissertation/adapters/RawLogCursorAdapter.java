@@ -25,7 +25,7 @@ import java.util.Map;
  */
 public class RawLogCursorAdapter extends CursorAdapter {
 
-    private Map<Integer, String> elementTypeColumnMap = new HashMap<>();
+    private Map<String, Integer> elementTypeColumnMap = new HashMap<>();
 
     public RawLogCursorAdapter(Context context, Cursor c, boolean autoRequery) {
         super(context, c, autoRequery);
@@ -44,8 +44,7 @@ public class RawLogCursorAdapter extends CursorAdapter {
 
             TextView elementTextView = (TextView) linearLayout.findViewById(R.id.elementView);
             Spinner spinnerView = (Spinner) linearLayout.findViewById(R.id.structElement);
-            setUpSpinner(context, spinnerView);
-            spinnerView.setTag(i);
+            setUpSpinner(context, spinnerView, i);
             viewHolder.elementsViewList.add(elementTextView);
             viewHolder.spinnerViewList.add(spinnerView);
         }
@@ -54,7 +53,7 @@ public class RawLogCursorAdapter extends CursorAdapter {
         return rowLayout;
     }
 
-    private Spinner setUpSpinner(Context context, Spinner spinnerView) {
+    private Spinner setUpSpinner(Context context, Spinner spinnerView, int columnNum) {
         BPLog.LogStructElem[] logStructElems = BPLog.LogStructElem.values();
         String[] values = new String[logStructElems.length];
         for (int i = 0; i < logStructElems.length; i++) {
@@ -62,12 +61,13 @@ public class RawLogCursorAdapter extends CursorAdapter {
         }
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, values);
         spinnerView.setAdapter(arrayAdapter);
+        spinnerView.setTag(columnNum);
         spinnerView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Integer columnNum = (Integer) view.getTag();
+                Integer columnNum = (Integer) parent.getTag();
                 BPLog.LogStructElem elem = BPLog.LogStructElem.values()[position];
-                elementTypeColumnMap.put(columnNum, elem.toString());
+                elementTypeColumnMap.put(elem.toString(), columnNum);
             }
 
             @Override
@@ -95,7 +95,7 @@ public class RawLogCursorAdapter extends CursorAdapter {
         }
     }
 
-    Map<Integer,String> getElementColumnMap(){
+    public Map<String, Integer> getElementColumnMap(){
         return elementTypeColumnMap;
     }
 
