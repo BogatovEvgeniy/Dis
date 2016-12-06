@@ -3,9 +3,6 @@ package com.example.pc.dissertation;
 import android.database.Cursor;
 import android.util.Log;
 
-/**
- * Created by Ievgen_Bogatov on 12/5/2016.
- */
 public class Utils {
 
     public static final String TAG = Utils.class.getName();
