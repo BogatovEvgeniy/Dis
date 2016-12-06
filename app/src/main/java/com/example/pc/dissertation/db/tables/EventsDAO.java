@@ -8,10 +8,6 @@ import com.example.pc.dissertation.AppApplication;
 
 import java.util.List;
 
-/**
- * Created by PC on 30.11.2016.
- */
-
 public class EventsDAO {
     private static String TABLE_COLUMS_LIST;
     private static ContentValues VALUES_TO_INSERT;

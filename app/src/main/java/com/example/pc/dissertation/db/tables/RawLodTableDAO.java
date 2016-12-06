@@ -8,10 +8,6 @@ import com.example.pc.dissertation.AppApplication;
 
 import java.util.List;
 
-/**
- * Created by PC on 02.12.2016.
- */
-
 public class RawLodTableDAO {
     public static void insert(List<String> row) {
         ContentValues contentValues = new ContentValues();

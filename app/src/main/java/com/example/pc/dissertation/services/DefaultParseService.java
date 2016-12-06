@@ -17,9 +17,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
 
-/**
- * Created by PC on 26.11.2016.
- */
 public class DefaultParseService extends ParseService {
 
     private static final java.lang.String PARSER_THREAD = "parser_thread";

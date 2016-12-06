@@ -15,9 +15,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by PC on 05.11.2016.
- */
 public class SelectStrategyActivity extends Activity {
 
     public static final String TAG = SelectStrategyActivity.class.getName();

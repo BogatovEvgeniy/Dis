@@ -6,10 +6,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.pc.dissertation.db.tables.EventsTable;
 
-/**
- * Created by PC on 30.11.2016.
- */
-
 public class DBHelperImpl extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "Dissertation.db";

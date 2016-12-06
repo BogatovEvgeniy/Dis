@@ -3,10 +3,6 @@ package com.example.pc.dissertation.db.tables;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Created by PC on 30.11.2016.
- */
-
 public class EventsTable {
     public static String TABLE_NAME = "EVENTS";
     private static final String TEXT_TYPE = " TEXT";

@@ -6,9 +6,6 @@ import android.content.Intent;
 import com.example.pc.dissertation.BPLog;
 import com.example.pc.dissertation.LogParsingListener;
 
-/**
- * Created by PC on 26.11.2016.
- */
 public abstract class ParseService extends IntentService{
 
     protected static LogParsingListener logParsingListener;

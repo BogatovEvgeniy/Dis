@@ -12,10 +12,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.nio.channels.FileChannel;
 
-/**
- * Created by PC on 30.11.2016.
- */
-
 public class AppApplication extends Application{
 
     private static  SQLiteOpenHelper dbHelper;

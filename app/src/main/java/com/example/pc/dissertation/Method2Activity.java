@@ -5,9 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-/**
- * Created by PC on 05.11.2016.
- */
 public class Method2Activity extends Activity {
 
     @Override

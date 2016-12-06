@@ -20,9 +20,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by PC on 03.12.2016.
- */
 public class RawLogCursorAdapter extends CursorAdapter {
 
     private Map<String, Integer> elementTypeColumnMap = new HashMap<>();

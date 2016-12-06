@@ -8,9 +8,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by PC on 26.11.2016.
- */
 public class BPLog {
     private static BPLog INSTANCE;
 

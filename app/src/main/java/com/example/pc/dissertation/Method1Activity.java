@@ -31,9 +31,6 @@ import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by PC on 05.11.2016.
- */
 public class Method1Activity extends AppCompatActivity {
 
     private static final int REQUEST_CODE_GET_LOG_FILE = 0x0001;
