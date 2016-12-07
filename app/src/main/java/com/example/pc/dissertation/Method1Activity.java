@@ -13,17 +13,14 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.GridView;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pc.dissertation.adapters.RawLogCursorAdapter;
-import com.example.pc.dissertation.db.tables.RawLodTableDAO;
+import com.example.pc.dissertation.db.daos.RawLodTableDAO;
 import com.example.pc.dissertation.services.DefaultParseService;
 
 import java.io.File;

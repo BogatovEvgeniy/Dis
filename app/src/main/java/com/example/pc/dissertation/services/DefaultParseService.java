@@ -6,8 +6,7 @@ import android.os.HandlerThread;
 
 import com.example.pc.dissertation.AppApplication;
 import com.example.pc.dissertation.BPLog;
-import com.example.pc.dissertation.LogParsingListener;
-import com.example.pc.dissertation.db.tables.RawLodTableDAO;
+import com.example.pc.dissertation.db.daos.RawLodTableDAO;
 import com.example.pc.dissertation.db.tables.RawLogTable;
 
 import java.io.BufferedReader;

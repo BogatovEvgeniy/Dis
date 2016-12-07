@@ -32,7 +32,7 @@
     <string name="click_to_analyze_only_users"> > Click to analyze only users</string>
     <string name="click_to_analyze_both_objects_and_users"> > Click to analyze both objects and users</string>
     <string name="analyze_objects_of_is">Analyze objects of IS</string>
-    <string name="select_departments">Select on or few departments:</string>
+    <string name="select_departments">Select one or few departments:</string>
     <string name="select_departments_mock">Management; QA; \nProcessOwners</string>
     <string name="select_objects">Select separate objects:"</string>
     <string name="selected_objects_mock">@string/empty_string</string>
@@ -46,5 +46,6 @@
     <string name="founded_processes">Founded processes:</string>
     <string name="min_rule_length_mock">2</string>
     <string name="export_results">Export search results</string>
-    <string name="save_lof_in_file_system"><![CDATA[Save structured log in file system >>>]]></string>
+    <string name="save_lof_in_open_xes">Save structured log in openXES format</string>
+    <string name="which_strcut_element_use">Which strcut element use</string>
 </resources>

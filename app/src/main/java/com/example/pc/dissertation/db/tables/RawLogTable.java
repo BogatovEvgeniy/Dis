@@ -1,12 +1,13 @@
 package com.example.pc.dissertation.db.tables;
 
 import com.example.pc.dissertation.AppApplication;
+import com.example.pc.dissertation.db.daos.RawLodTableDAO;
 
 import java.util.List;
 
 public class RawLogTable extends DBTable {
 
-    public static final String TABLE_NAME = "RowLog";
+    public static final String TABLE_NAME = "ROW_LOG";
     private static final String _ID = "_id";
     public static final String ELEMENT_PREFFIX = "ELEMENT_";
     public static int COLUMNS_COUNT;

@@ -20,7 +20,7 @@
         </activity>
         <activity android:name=".Method1Activity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".Method2Activity"
+        <activity android:name=".Method2Step1Activity"
             android:screenOrientation="portrait"/>
         <activity android:name=".SelectStrategyActivity"
             android:screenOrientation="portrait"/>

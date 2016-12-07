@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.method2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, Method2Activity.class));
+                startActivity(new Intent(MainActivity.this, Method2Step1Activity.class));
             }
         });
     }

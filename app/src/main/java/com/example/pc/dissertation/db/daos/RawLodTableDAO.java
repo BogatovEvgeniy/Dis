@@ -1,10 +1,11 @@
-package com.example.pc.dissertation.db.tables;
+package com.example.pc.dissertation.db.daos;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.util.Log;
 
 import com.example.pc.dissertation.AppApplication;
+import com.example.pc.dissertation.db.tables.RawLogTable;
 
 import java.util.List;
 

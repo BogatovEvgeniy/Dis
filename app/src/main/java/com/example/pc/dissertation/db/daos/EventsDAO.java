@@ -1,12 +1,15 @@
-package com.example.pc.dissertation.db.tables;
+package com.example.pc.dissertation.db.daos;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.pc.dissertation.AppApplication;
+import com.example.pc.dissertation.db.tables.EventsTable;
 
 import java.util.List;
+
+import static com.example.pc.dissertation.db.daos.Utils.insertValue;
 
 public class EventsDAO {
     private static String TABLE_COLUMS_LIST;
@@ -30,24 +33,15 @@ public class EventsDAO {
     public static String STATUS = "status";
 
     // TODO could be replaced with some builder to prevent bugs and organize code in a better way
-    public static void insert(String process, String user, String userRole, String object, String timestamp, String status) {
+    public static void insert(String process, String user, String userRole, String object, long timestamp, String status) {
         SQLiteDatabase writableDBInstance = AppApplication.getWritableDBInstance();
         ContentValues contentValues = new ContentValues();
-        insertValue(contentValues,EventsTable.PROCESS, process);
         insertValue(contentValues,EventsTable.USER, user);
         insertValue(contentValues,EventsTable.USER_ROLE, userRole);
         insertValue(contentValues,EventsTable.OBJECT, object);
         insertValue(contentValues,EventsTable.TIMESTAMP, timestamp);
         insertValue(contentValues,EventsTable.STATUS, status);
         writableDBInstance.insert(EventsTable.TABLE_NAME, TABLE_COLUMS_LIST, contentValues);
-    }
-
-    private static void insertValue(ContentValues contentValues, String column, String value) {
-        if (value == null){
-            contentValues.putNull(column);
-        } else {
-            contentValues.put(column, value);
-        }
     }
 
     public static void select(String rowID) {
@@ -66,5 +60,16 @@ public class EventsDAO {
 
     public static Cursor getAllRows() {
         return AppApplication.getWritableDBInstance().rawQuery("SELECT * FROM " + EventsTable.TABLE_NAME, null);
+    }
+
+    public static Cursor getAllRows(String columnName, boolean groupItems) {
+        String sqlQuery = "SELECT " + columnName + " FROM " + EventsTable.TABLE_NAME;
+
+        if (groupItems){
+            sqlQuery += " GROUP BY " + columnName;
+        }
+
+        return AppApplication.getWritableDBInstance().rawQuery(
+                sqlQuery, null);
     }
 }
