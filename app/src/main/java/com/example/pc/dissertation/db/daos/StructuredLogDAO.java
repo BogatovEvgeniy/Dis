@@ -36,38 +36,44 @@ public class StructuredLogDAO {
     public static Cursor findProcessEvents(String searchValue, String startItem, String endItem) {
 
         // Get sets of first and las items
-        String queryFirstItem = "SELECT * FROM" + StructuredLogTable.TABLE_NAME + " WHERE " + searchValue + " IS " + startItem;
+        String queryFirstItem = "SELECT * FROM " + EventsTable.TABLE_NAME + " WHERE " + searchValue + "='" + startItem + "'";
         Cursor firstItemIndexCursor = AppApplication.getWritableDBInstance().rawQuery(
                 queryFirstItem, null);
 
-        String queryLastItem = "SELECT * FROM" + StructuredLogTable.TABLE_NAME + " WHERE " + searchValue + " IS " + endItem;
+        String queryLastItem = "SELECT * FROM " + EventsTable.TABLE_NAME + " WHERE " + searchValue + "='" + endItem + "'";
         Cursor secondItemIndexCursor = AppApplication.getWritableDBInstance().rawQuery(
                 queryLastItem, null);
 
         // Get start item pos
-        firstItemIndexCursor.moveToFirst();
-        long startItemID = firstItemIndexCursor.getLong(
-                firstItemIndexCursor.getColumnIndex(StructuredLogTable._ID));
-        long firstItemTimestamp = firstItemIndexCursor.getLong(
-                firstItemIndexCursor.getColumnIndex(StructuredLogTable.TIMESTAMP));
-        secondItemIndexCursor.moveToFirst();
-
+        long startItemID = 0;
+        long firstItemTimestamp =0;
+        if (firstItemIndexCursor.moveToFirst()) {
+            startItemID = firstItemIndexCursor.getLong(firstItemIndexCursor.getColumnIndex(
+                    EventsTable._ID));
+            firstItemTimestamp = firstItemIndexCursor.getLong(firstItemIndexCursor.getColumnIndex(EventsTable.TIMESTAMP));
+            secondItemIndexCursor.moveToFirst();
+        }
         // Get end item pos
-        long endItemID = firstItemIndexCursor.getLong(
-                secondItemIndexCursor.getColumnIndex(StructuredLogTable._ID));
-        long secondItemTimestamp = firstItemIndexCursor.getLong(
-                secondItemIndexCursor.getColumnIndex(StructuredLogTable.TIMESTAMP));
-        while (secondItemTimestamp < firstItemTimestamp) {
-            endItemID = firstItemIndexCursor.getLong(
-                    firstItemIndexCursor.getColumnIndex(StructuredLogTable._ID));
-            secondItemTimestamp = firstItemIndexCursor.getLong(
-                    firstItemIndexCursor.getColumnIndex(StructuredLogTable.TIMESTAMP));
+        long endItemID = 0;
+        long secondItemTimestamp = 0;
+        if (secondItemIndexCursor.moveToFirst()) {
+            endItemID = secondItemIndexCursor.getLong(secondItemIndexCursor.getColumnIndex(EventsTable._ID));
+            secondItemTimestamp = secondItemIndexCursor.getLong(secondItemIndexCursor.getColumnIndex(EventsTable.TIMESTAMP));
+            while (secondItemTimestamp < firstItemTimestamp) {
+                endItemID = secondItemIndexCursor.getLong(secondItemIndexCursor.getColumnIndex(EventsTable._ID));
+                secondItemTimestamp = secondItemIndexCursor.getLong(secondItemIndexCursor.getColumnIndex(EventsTable.TIMESTAMP));
 
-            if (secondItemIndexCursor.isLast()) {
-                break;
+                if (secondItemIndexCursor.isLast()) {
+                    break;
+                }
             }
         }
-        String eventSetQuery = "SELECT * FROM " + StructuredLogTable.TABLE_NAME + " WHERE " + EventsTable._ID + " BETWEEN " + startItemID + " AND " + endItemID;
+
+        String eventSetQuery = "SELECT * FROM " + EventsTable.TABLE_NAME + " WHERE " + EventsTable._ID + " BETWEEN '" + startItemID + "' AND '" + endItemID + "'";
         return AppApplication.getWritableDBInstance().rawQuery(eventSetQuery, null);
+    }
+
+    public static void delete() {
+        AppApplication.getWritableDBInstance().execSQL(StructuredLogTable.getDeleteStatement());
     }
 }

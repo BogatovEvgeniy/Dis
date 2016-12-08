@@ -19,15 +19,6 @@ public class RawLodTableDAO {
     }
 
     public static Cursor readAllRows() {
-        return AppApplication.getWritableDBInstance().rawQuery("SELECT * FROM " + RawLogTable.TABLE_NAME, null);
-    }
-
-    private static void printLineInLog(Cursor cursor, String[] columnNames) {
-        StringBuffer stringBuffer = new StringBuffer();
-        for (int i =  0; i < columnNames.length; i++) {
-            stringBuffer.append("COL NAME:" + i + " has value:" + cursor.getString(i));
-            stringBuffer.append(" | ");
-        }
-        Log.d("DB SCREEN", stringBuffer.toString());
+        return AppApplication.getWritableDBInstance().rawQuery("SELECT * FROM " + RawLogTable.TABLE_NAME , null);
     }
 }

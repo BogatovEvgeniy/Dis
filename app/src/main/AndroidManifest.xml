@@ -11,7 +11,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:name=".AppApplication">
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,6 +26,8 @@
         <activity android:name=".SelectStrategyActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".StrategySetUpActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Method2Step2Activity"
             android:screenOrientation="portrait"/>
         <service android:name=".services.DefaultParseService"/>
     </application>

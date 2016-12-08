@@ -33,14 +33,13 @@ public class EventsDAO {
     public static String STATUS = "status";
 
     // TODO could be replaced with some builder to prevent bugs and organize code in a better way
-    public static void insert(String process, String user, String userRole, String object, long timestamp, String status) {
+    public static void insert(String user, String userRole, String object, long timestamp) {
         SQLiteDatabase writableDBInstance = AppApplication.getWritableDBInstance();
         ContentValues contentValues = new ContentValues();
         insertValue(contentValues,EventsTable.USER, user);
         insertValue(contentValues,EventsTable.USER_ROLE, userRole);
         insertValue(contentValues,EventsTable.OBJECT, object);
         insertValue(contentValues,EventsTable.TIMESTAMP, timestamp);
-        insertValue(contentValues,EventsTable.STATUS, status);
         writableDBInstance.insert(EventsTable.TABLE_NAME, TABLE_COLUMS_LIST, contentValues);
     }
 
@@ -59,17 +58,19 @@ public class EventsDAO {
     }
 
     public static Cursor getAllRows() {
-        return AppApplication.getWritableDBInstance().rawQuery("SELECT * FROM " + EventsTable.TABLE_NAME, null);
+        return AppApplication.getWritableDBInstance().rawQuery("SELECT * FROM " + EventsTable.TABLE_NAME  + " ORDER BY " + TIMESTAMP , null);
     }
 
     public static Cursor getAllRows(String columnName, boolean groupItems) {
-        String sqlQuery = "SELECT " + columnName + " FROM " + EventsTable.TABLE_NAME;
+        StringBuilder sqlQueryBuilder = new StringBuilder();
+        sqlQueryBuilder.append("SELECT " + columnName + " FROM " + EventsTable.TABLE_NAME);
 
         if (groupItems){
-            sqlQuery += " GROUP BY " + columnName;
+            sqlQueryBuilder.append(" GROUP BY " + columnName);
         }
 
+        sqlQueryBuilder.append(" ORDER BY " + columnName);
         return AppApplication.getWritableDBInstance().rawQuery(
-                sqlQuery, null);
+                sqlQueryBuilder.toString(), null);
     }
 }

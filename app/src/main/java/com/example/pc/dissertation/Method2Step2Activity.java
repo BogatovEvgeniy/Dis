@@ -6,7 +6,7 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
 
-import com.example.pc.dissertation.db.daos.StructuredLogDAO;
+import com.example.pc.dissertation.db.daos.*;
 import com.example.pc.dissertation.db.tables.StructuredLogTable;
 import com.example.pc.dissertation.models.BusinessProcess;
 
@@ -25,9 +25,16 @@ public class Method2Step2Activity extends Activity implements LoaderManager.Load
             String searchVal = extras.getString(Method2Step1Activity.EXTRAS_SEARCH_VAL);
             String startItem = extras.getString(Method2Step1Activity.EXTRAS_START_ITEM);
             String endItem = extras.getString(Method2Step1Activity.EXTRAS_END_ITEM);
-            StructuredLogDAO.create();
+            createStructLog();
             buildStructuredLog(searchVal, startItem, endItem);
         }
+    }
+
+    private void createStructLog() {
+        if (com.example.pc.dissertation.db.daos.Utils.checkTableExistance(StructuredLogTable.TABLE_NAME)){
+            StructuredLogDAO.delete();
+        }
+        StructuredLogDAO.create();
     }
 
     private void buildStructuredLog(String searchVal, String startItem, String endItem) {

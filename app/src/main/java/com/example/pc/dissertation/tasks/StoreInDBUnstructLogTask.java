@@ -25,7 +25,6 @@ public class StoreInDBUnstructLogTask implements Runnable {
     @Override
     public void run() {
         Cursor cursor = RawLodTableDAO.readAllRows();
-        Utils.printCursorInLog(EventsDAO.getAllRows());
         List<String> tableCols = EventsTable.getAllColumnsName();
         int[] orderOfInsertionValues = getInsertionArr(tableCols);
 
@@ -62,19 +61,16 @@ public class StoreInDBUnstructLogTask implements Runnable {
             int i = 0;
             do {
                 i++;
-                // TODO It's terrible but I have no timi to make right decision is it should be builder, string arr, structure or smthg. else
-                int processIndex = orderOfInsertionValues[0];
-                int userIndex = orderOfInsertionValues[1];
-                int userRoleIndex = orderOfInsertionValues[2];
-                int objectIndex = orderOfInsertionValues[3];
-                int timestumpIndex = orderOfInsertionValues[4];
-                int statusIndex = orderOfInsertionValues[5];
-                EventsDAO.insert(processIndex == -1 ? null : cursor.getString(processIndex),
+                // TODO It's terrible but I have no time to make right decision is it should be builder, string arr, structure or smthg. else
+                int userIndex = orderOfInsertionValues[0];
+                int userRoleIndex = orderOfInsertionValues[1];
+                int objectIndex = orderOfInsertionValues[2];
+                int timestumpIndex = orderOfInsertionValues[3];
+                EventsDAO.insert(
                         userIndex == -1 ? null : cursor.getString(userIndex),
                         userRoleIndex == -1 ? null : cursor.getString(userRoleIndex),
                         objectIndex == -1 ? null : cursor.getString(objectIndex),
-                        new SimpleDateFormat("MM/dd/yyyy").parse(cursor.getString(timestumpIndex)).getTime(),
-                        statusIndex == -1 ? null : cursor.getString(statusIndex));
+                        timestumpIndex == -1 ? null : new SimpleDateFormat("dd/MM/yyyy").parse(cursor.getString(timestumpIndex)).getTime());
             } while (cursor.moveToNext());
             Log.d(TAG, "The insertion was madden " + i + " times");
         }

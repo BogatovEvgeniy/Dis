@@ -29,7 +29,7 @@ public class StructuredLogTable{
                 STATUS + TEXT_TYPE + " )";
     }
 
-    String getDeleteStatement() {
+    public static String getDeleteStatement() {
         return "DROP TABLE " + TABLE_NAME;
     }
 

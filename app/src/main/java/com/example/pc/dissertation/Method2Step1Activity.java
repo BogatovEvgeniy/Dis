@@ -45,6 +45,7 @@ public class Method2Step1Activity extends Activity {
                 bundle.putString(EXTRAS_SEARCH_VAL, selectedStructElem.name());
                 bundle.putString(EXTRAS_START_ITEM, startItem);
                 bundle.putString(EXTRAS_END_ITEM, endItem);
+                intent.putExtras(bundle);
                 startActivity(intent);
             }
         });

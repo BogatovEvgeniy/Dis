@@ -76,16 +76,16 @@ public class DefaultParseService extends ParseService {
         int elementOffset = 0;
         int lastFoundElementSeparator = 0;
         while (lastFoundElementSeparator != -1 && lastFoundElementSeparator != parseLine.length() - 1) {
-            int newFoundElementSeparatorIndex = parseLine.indexOf(elementSeparator, elementOffset);
+            int nextElementSeparatorIndex = parseLine.indexOf(elementSeparator, elementOffset);
             String element;
-            if (newFoundElementSeparatorIndex == -1) {
+            if (nextElementSeparatorIndex == -1) {
                 element = parseLine.substring(elementOffset, parseLine.length() - 1);
             } else {
-                element = parseLine.substring(elementOffset, newFoundElementSeparatorIndex);
+                element = parseLine.substring(elementOffset, nextElementSeparatorIndex);
             }
-            rawStuctBuilder.addElement(element);
-            elementOffset = newFoundElementSeparatorIndex + 1;
-            lastFoundElementSeparator = newFoundElementSeparatorIndex;
+            rawStuctBuilder.addElement(element.trim());
+            elementOffset = nextElementSeparatorIndex + 1;
+            lastFoundElementSeparator = nextElementSeparatorIndex;
         }
     }
 }
