@@ -2,12 +2,16 @@ package com.example.pc.dissertation.db.daos;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.util.Pair;
 
 import com.example.pc.dissertation.AppApplication;
 import com.example.pc.dissertation.db.tables.EventsTable;
 import com.example.pc.dissertation.db.tables.StructuredLogTable;
 import com.example.pc.dissertation.models.BusinessProcess;
 import com.example.pc.dissertation.models.Event;
+
+import java.util.LinkedList;
+import java.util.List;
 
 import static com.example.pc.dissertation.db.daos.Utils.insertValue;
 
@@ -34,6 +38,7 @@ public class StructuredLogDAO {
     }
 
     public static Cursor findProcessEvents(String searchValue, String startItem, String endItem) {
+        List<Pair> startEndItemList = new LinkedList<>();
 
         // Get sets of first and las items
         String queryFirstItem = "SELECT * FROM " + EventsTable.TABLE_NAME + " WHERE " + searchValue + "='" + startItem + "'";
@@ -44,33 +49,56 @@ public class StructuredLogDAO {
         Cursor secondItemIndexCursor = AppApplication.getWritableDBInstance().rawQuery(
                 queryLastItem, null);
 
-        // Get start item pos
-        long startItemID = 0;
-        long firstItemTimestamp =0;
-        if (firstItemIndexCursor.moveToFirst()) {
-            startItemID = firstItemIndexCursor.getLong(firstItemIndexCursor.getColumnIndex(
-                    EventsTable._ID));
-            firstItemTimestamp = firstItemIndexCursor.getLong(firstItemIndexCursor.getColumnIndex(EventsTable.TIMESTAMP));
-            secondItemIndexCursor.moveToFirst();
-        }
-        // Get end item pos
-        long endItemID = 0;
-        long secondItemTimestamp = 0;
-        if (secondItemIndexCursor.moveToFirst()) {
-            endItemID = secondItemIndexCursor.getLong(secondItemIndexCursor.getColumnIndex(EventsTable._ID));
-            secondItemTimestamp = secondItemIndexCursor.getLong(secondItemIndexCursor.getColumnIndex(EventsTable.TIMESTAMP));
+
+        int startItemID = -1;
+        int firstItemTimestamp = 0;
+        int endItemID = -1;
+        int secondItemTimestamp = 0;
+
+        while (firstItemIndexCursor.moveToNext() && secondItemIndexCursor.moveToNext()) {
+            // Get start item pos
+            int columnIndex = firstItemIndexCursor.getColumnIndex(EventsTable._ID);
+            startItemID = firstItemIndexCursor.getInt(columnIndex);
+            int columnIndex1 = firstItemIndexCursor.getColumnIndex(EventsTable.TIMESTAMP);
+            firstItemTimestamp = firstItemIndexCursor.getInt(columnIndex1);
+
+            // Get end item pos
+            endItemID = secondItemIndexCursor.getInt(
+                    secondItemIndexCursor.getColumnIndex(EventsTable._ID));
+            secondItemTimestamp = secondItemIndexCursor.getInt(
+                    secondItemIndexCursor.getColumnIndex(EventsTable.TIMESTAMP));
             while (secondItemTimestamp < firstItemTimestamp) {
-                endItemID = secondItemIndexCursor.getLong(secondItemIndexCursor.getColumnIndex(EventsTable._ID));
-                secondItemTimestamp = secondItemIndexCursor.getLong(secondItemIndexCursor.getColumnIndex(EventsTable.TIMESTAMP));
+                endItemID = secondItemIndexCursor.getInt(
+                        secondItemIndexCursor.getColumnIndex(EventsTable._ID));
+                secondItemTimestamp = secondItemIndexCursor.getInt(
+                        secondItemIndexCursor.getColumnIndex(EventsTable.TIMESTAMP));
 
                 if (secondItemIndexCursor.isLast()) {
                     break;
                 }
             }
+            startEndItemList.add(new Pair(startItemID, endItemID));
         }
 
-        String eventSetQuery = "SELECT * FROM " + EventsTable.TABLE_NAME + " WHERE " + EventsTable._ID + " BETWEEN '" + startItemID + "' AND '" + endItemID + "'";
-        return AppApplication.getWritableDBInstance().rawQuery(eventSetQuery, null);
+        StringBuilder eventSetQuery = new StringBuilder();
+        eventSetQuery.append("SELECT * FROM " + EventsTable.TABLE_NAME + " WHERE ");
+        if (startEndItemList.size() > 0) {
+            eventSetQuery.append(" ( ");
+            eventSetQuery.append(EventsTable._ID);
+            eventSetQuery.append(
+                    " BETWEEN '" + startEndItemList.get(0).first + "' AND '" + startEndItemList
+                            .get(0).second + "')");
+        }
+        for (int i = 1; i < startEndItemList.size(); i++) {
+            eventSetQuery.append(" OR ");
+            eventSetQuery.append(" ( ");
+            eventSetQuery.append(EventsTable._ID);
+            eventSetQuery.append(
+                    " BETWEEN '" + startEndItemList.get(i).first + "' AND '" + startEndItemList
+                            .get(i).second + "')");
+        }
+
+        return AppApplication.getWritableDBInstance().rawQuery(eventSetQuery.toString(), null);
     }
 
     public static void delete() {

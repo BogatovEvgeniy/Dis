@@ -121,8 +121,8 @@ public class Method2Step1Activity extends Activity {
         String[] values = new String[]{};
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, values);
-        startItemSpinner.setAdapter(arrayAdapter);
-        startItemSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        endItemSpinner.setAdapter(arrayAdapter);
+        endItemSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 endItem = ((TextView) view).getText().toString();
