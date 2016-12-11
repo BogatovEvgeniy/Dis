@@ -14,11 +14,22 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 
 public class OpenXESBuilder {
-    //Header
     public static String DEFAULT_XML_HEADER = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 
     //Elements
-    public static String XML_OPEN_ELEMENT_LOG = "<log>";
+    public static String XML_OPEN_ELEMENT_LOG = "<log xes.version=\"1.0\" xes.features=\"nested-attributes\" openxes.version=\"1.0RC7\" xmlns=\"http://www.xes-standard.org/\">";
+    public static String XML_NECESSURRY_EXTENTION_PART = "\t<extension name=\"Organizational\" prefix=\"org\" uri=\"http://www.xes-standard.org/org.xesext\"/>\n" +
+            "\t<extension name=\"Time\" prefix=\"time\" uri=\"http://www.xes-standard.org/time.xesext\"/>\n" +
+            "\t<extension name=\"Concept\" prefix=\"concept\" uri=\"http://www.xes-standard.org/concept.xesext\"/>\n" +
+            "\t<global scope=\"trace\">\n" +
+            "\t\t<string key=\"concept:name\" value=\"__INVALID__\"/>\n" +
+            "\t</global>\n" +
+            "\t<global scope=\"event\">\n" +
+            "\t\t<string key=\"concept:name\" value=\"__INVALID__\"/>\n" +
+            "\t\t<string key=\"lifecycle:transition\" value=\"complete\"/>\n" +
+            "\t</global>\n" +
+            "\t<string key=\"source\" value=\"Dissertation testing\"/>\n" +
+            "\t<string key=\"concept:name\" value=\"Diss.mxml\"/>";
     public static String XML_CLOSE_ELEMENT_LOG = "</log>";
     public static String XML_OPEN_ELEMENT_TRACE = "<trace>";
     public static String XML_CLOSE_ELEMENT_TRACE = "</trace>";
@@ -37,8 +48,8 @@ public class OpenXESBuilder {
     public static String STRING_DATA = "<string ";
     public static String DATE_DATA = "<date ";
     public static String CLOSE_ELEMENT = "  />";
-    public static String EVENT_ATR_KEY = "  key=";
-    public static String EVENT_ATR_VAL = "  val=";
+    public static String EVENT_ATR_KEY = "  key=\"";
+    public static String EVENT_ATR_VAL = "  val=\"";
 
 
     public static void generateLog() throws IOException {
@@ -61,6 +72,7 @@ public class OpenXESBuilder {
 
         bufferedWriter.write(DEFAULT_XML_HEADER);
         bufferedWriter.write(XML_OPEN_ELEMENT_LOG);
+        bufferedWriter.write(XML_NECESSURRY_EXTENTION_PART);
 
         int currentProcess = 0;
         int processIndex = 0;
@@ -108,6 +120,6 @@ public class OpenXESBuilder {
     private static void insertStringData(BufferedWriter bufferedWriter, String elementType,
             String key, String val) throws IOException {
         bufferedWriter.write(
-                elementType + EVENT_ATR_KEY + key + EVENT_ATR_VAL + val + CLOSE_ELEMENT);
+                elementType + EVENT_ATR_KEY + key + "\"" + EVENT_ATR_VAL + val + "\"" + CLOSE_ELEMENT);
     }
 }
