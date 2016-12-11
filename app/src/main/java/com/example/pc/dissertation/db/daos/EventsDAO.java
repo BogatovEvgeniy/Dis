@@ -73,4 +73,9 @@ public class EventsDAO {
         return AppApplication.getWritableDBInstance().rawQuery(
                 sqlQueryBuilder.toString(), null);
     }
+
+    public static Cursor getRowsBetween(Object first, Object second) {
+        String query = "SELECT * FROM " + EventsTable.TABLE_NAME + " WHERE " + EventsTable._ID + " BETWEEN " + first + " AND " + second;
+        return AppApplication.getReadableDBInstance().rawQuery(query, null);
+    }
 }

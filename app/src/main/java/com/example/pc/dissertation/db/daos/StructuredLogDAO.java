@@ -2,6 +2,7 @@ package com.example.pc.dissertation.db.daos;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.support.annotation.NonNull;
 import android.util.Pair;
 
 import com.example.pc.dissertation.AppApplication;
@@ -37,49 +38,51 @@ public class StructuredLogDAO {
         }
     }
 
-    public static Cursor findProcessEvents(String searchValue, String startItem, String endItem) {
+    public static List<Pair> findProcessEvents(String searchValue, String startItem, String endItem) {
         List<Pair> startEndItemList = new LinkedList<>();
+        Cursor firstItemsCursor = getItemsCursor(searchValue, startItem);
+        Cursor secondItemsCursor = getItemsCursor(searchValue, endItem);
+        buildStartEndProcessItemsList(startEndItemList, firstItemsCursor, secondItemsCursor);
+        return startEndItemList;
+    }
 
-        // Get sets of first and las items
-        String queryFirstItem = "SELECT * FROM " + EventsTable.TABLE_NAME + " WHERE " + searchValue + "='" + startItem + "'";
-        Cursor firstItemIndexCursor = AppApplication.getWritableDBInstance().rawQuery(
-                queryFirstItem, null);
+    private static Cursor getItemsCursor(String searchColumn, String searchItem) {
+        String queryLastItem = "SELECT * FROM " + EventsTable.TABLE_NAME + " WHERE " + searchColumn + "='" + searchItem + "'";
+        return AppApplication.getWritableDBInstance().rawQuery(queryLastItem, null);
+    }
 
-        String queryLastItem = "SELECT * FROM " + EventsTable.TABLE_NAME + " WHERE " + searchValue + "='" + endItem + "'";
-        Cursor secondItemIndexCursor = AppApplication.getWritableDBInstance().rawQuery(
-                queryLastItem, null);
-
-
-        int startItemID = -1;
-        int firstItemTimestamp = 0;
-        int endItemID = -1;
-        int secondItemTimestamp = 0;
+    private static void buildStartEndProcessItemsList(List<Pair> startEndItemList,
+            Cursor firstItemIndexCursor, Cursor secondItemIndexCursor) {
+        long startItemID = -1;
+        long firstItemTimestamp = 0;
+        long endItemID = -1;
+        long secondItemTimestamp = 0;
 
         while (firstItemIndexCursor.moveToNext() && secondItemIndexCursor.moveToNext()) {
             // Get start item pos
-            int columnIndex = firstItemIndexCursor.getColumnIndex(EventsTable._ID);
-            startItemID = firstItemIndexCursor.getInt(columnIndex);
-            int columnIndex1 = firstItemIndexCursor.getColumnIndex(EventsTable.TIMESTAMP);
-            firstItemTimestamp = firstItemIndexCursor.getInt(columnIndex1);
+            startItemID = firstItemIndexCursor.getLong(firstItemIndexCursor.getColumnIndex(EventsTable._ID));
+            firstItemTimestamp = firstItemIndexCursor.getLong(firstItemIndexCursor.getColumnIndex(EventsTable.TIMESTAMP));
+            while (firstItemTimestamp < secondItemTimestamp) {
+                startItemID = firstItemIndexCursor.getLong(firstItemIndexCursor.getColumnIndex(EventsTable._ID));
+                firstItemTimestamp = firstItemIndexCursor.getLong(firstItemIndexCursor.getColumnIndex(EventsTable.TIMESTAMP));
+                if (secondItemIndexCursor.isLast()) break;
+            }
 
             // Get end item pos
-            endItemID = secondItemIndexCursor.getInt(
-                    secondItemIndexCursor.getColumnIndex(EventsTable._ID));
-            secondItemTimestamp = secondItemIndexCursor.getInt(
-                    secondItemIndexCursor.getColumnIndex(EventsTable.TIMESTAMP));
+            endItemID = secondItemIndexCursor.getLong(secondItemIndexCursor.getColumnIndex(EventsTable._ID));
+            secondItemTimestamp = secondItemIndexCursor.getLong(secondItemIndexCursor.getColumnIndex(EventsTable.TIMESTAMP));
             while (secondItemTimestamp < firstItemTimestamp) {
-                endItemID = secondItemIndexCursor.getInt(
-                        secondItemIndexCursor.getColumnIndex(EventsTable._ID));
-                secondItemTimestamp = secondItemIndexCursor.getInt(
-                        secondItemIndexCursor.getColumnIndex(EventsTable.TIMESTAMP));
+                endItemID = secondItemIndexCursor.getLong(secondItemIndexCursor.getColumnIndex(EventsTable._ID));
+                secondItemTimestamp = secondItemIndexCursor.getLong(secondItemIndexCursor.getColumnIndex(EventsTable.TIMESTAMP));
 
-                if (secondItemIndexCursor.isLast()) {
-                    break;
-                }
+                if (secondItemIndexCursor.isLast()) break;
             }
             startEndItemList.add(new Pair(startItemID, endItemID));
         }
+    }
 
+    @NonNull
+    private static StringBuilder buildSelectProcessQuery(List<Pair> startEndItemList) {
         StringBuilder eventSetQuery = new StringBuilder();
         eventSetQuery.append("SELECT * FROM " + EventsTable.TABLE_NAME + " WHERE ");
         if (startEndItemList.size() > 0) {
@@ -97,11 +100,15 @@ public class StructuredLogDAO {
                     " BETWEEN '" + startEndItemList.get(i).first + "' AND '" + startEndItemList
                             .get(i).second + "')");
         }
-
-        return AppApplication.getWritableDBInstance().rawQuery(eventSetQuery.toString(), null);
+        return eventSetQuery;
     }
 
     public static void delete() {
         AppApplication.getWritableDBInstance().execSQL(StructuredLogTable.getDeleteStatement());
+    }
+
+    public static Cursor getAllRows() {
+        String selectQuery = "SELECT * FROM " + StructuredLogTable.TABLE_NAME;
+        return AppApplication.getReadableDBInstance().rawQuery(selectQuery, null);
     }
 }

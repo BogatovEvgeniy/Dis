@@ -1,0 +1,113 @@
+package com.example.pc.dissertation.processbuilders;
+
+import android.database.Cursor;
+import android.os.Environment;
+
+import com.example.pc.dissertation.db.daos.StructuredLogDAO;
+import com.example.pc.dissertation.db.tables.StructuredLogTable;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+
+public class OpenXESBuilder {
+    //Header
+    public static String DEFAULT_XML_HEADER = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+
+    //Elements
+    public static String XML_OPEN_ELEMENT_LOG = "<log>";
+    public static String XML_CLOSE_ELEMENT_LOG = "</log>";
+    public static String XML_OPEN_ELEMENT_TRACE = "<trace>";
+    public static String XML_CLOSE_ELEMENT_TRACE = "</trace>";
+    public static String XML_OPEN_ELEMENT_EVENT = "<event>";
+    public static String XML_CLOSE_ELEMENT_EVENT = "</event>";
+
+    // Attributes
+    public static String XML_ATTR_USER;
+    public static String XML_ATTR_USER_ROLE;
+    public static String XML_ATTR_OBJECT;
+    public static String XML_ATTR_TIMESTAMP;
+    public static String XML_ATTR_STATUS;
+
+
+    // Types
+    public static String STRING_DATA = "<string ";
+    public static String DATE_DATA = "<date ";
+    public static String CLOSE_ELEMENT = "  />";
+    public static String EVENT_ATR_KEY = "  key=";
+    public static String EVENT_ATR_VAL = "  val=";
+
+
+    public static void generateLog() throws IOException {
+        Cursor logCursor = StructuredLogDAO.getAllRows();
+        File openXESFile = new File(Environment.getExternalStorageDirectory()
+                .getPath() + File.separatorChar + "Dis" + File.separatorChar + "Result.xes");
+        if (openXESFile.exists()) {
+            openXESFile.delete();
+        }
+        openXESFile.getParentFile().mkdirs();
+        openXESFile.createNewFile();
+
+        BufferedWriter bufferedWriter = null;
+        try {
+            bufferedWriter = new BufferedWriter(
+                    new OutputStreamWriter(new FileOutputStream(openXESFile)));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        bufferedWriter.write(DEFAULT_XML_HEADER);
+        bufferedWriter.write(XML_OPEN_ELEMENT_LOG);
+
+        int currentProcess = 0;
+        int processIndex = 0;
+        int userIndex = 0;
+        int userRoleIndex = 0;
+        int objectIndex = 0;
+        int timestampIndex = 0;
+        int statusIndex = 0;
+        while (logCursor.moveToNext()) {
+            if (logCursor.getPosition() == 0) {
+                processIndex = logCursor.getColumnIndex(StructuredLogTable.PROCESS);
+                userIndex = logCursor.getColumnIndex(StructuredLogTable.USER);
+                userRoleIndex = logCursor.getColumnIndex(StructuredLogTable.USER_ROLE);
+                objectIndex = logCursor.getColumnIndex(StructuredLogTable.OBJECT);
+                timestampIndex = logCursor.getColumnIndex(StructuredLogTable.TIMESTAMP);
+                statusIndex = logCursor.getColumnIndex(StructuredLogTable.STATUS);
+                currentProcess = logCursor.getInt(processIndex);
+                bufferedWriter.write(XML_OPEN_ELEMENT_TRACE);
+            }
+
+            if (currentProcess != logCursor.getInt(processIndex)) {
+                currentProcess = logCursor.getInt(processIndex);
+                bufferedWriter.write(XML_CLOSE_ELEMENT_TRACE);
+                bufferedWriter.write(XML_OPEN_ELEMENT_TRACE);
+            }
+
+            bufferedWriter.write(XML_OPEN_ELEMENT_EVENT);
+            insertStringData(bufferedWriter, STRING_DATA, StructuredLogTable.USER,
+                    logCursor.getString(userIndex));
+            insertStringData(bufferedWriter, STRING_DATA, StructuredLogTable.USER_ROLE,
+                    logCursor.getString(userRoleIndex));
+            insertStringData(bufferedWriter, STRING_DATA, StructuredLogTable.OBJECT,
+                    logCursor.getString(objectIndex));
+            insertStringData(bufferedWriter, DATE_DATA, StructuredLogTable.TIMESTAMP,
+                    logCursor.getString(timestampIndex));
+            insertStringData(bufferedWriter, STRING_DATA, StructuredLogTable.STATUS,
+                    logCursor.getString(statusIndex));
+            bufferedWriter.write(XML_CLOSE_ELEMENT_EVENT);
+        }
+        bufferedWriter.write(XML_CLOSE_ELEMENT_TRACE);
+        bufferedWriter.write(XML_CLOSE_ELEMENT_LOG);
+        bufferedWriter.close();
+    }
+
+    private static void insertStringData(BufferedWriter bufferedWriter, String elementType,
+            String key, String val) throws IOException {
+        bufferedWriter.write(
+                elementType + EVENT_ATR_KEY + key + EVENT_ATR_VAL + val + CLOSE_ELEMENT);
+    }
+}

@@ -67,8 +67,6 @@ public class BPLog {
     public static BPLog init(String path) {
         if (INSTANCE == null) {
             INSTANCE = new BPLog(path);
-        } else {
-            throw new IllegalStateException("The instance was initiated before.");
         }
         return INSTANCE;
     }

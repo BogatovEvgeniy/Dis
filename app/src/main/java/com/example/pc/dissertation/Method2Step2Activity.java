@@ -5,10 +5,15 @@ import android.app.LoaderManager;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Pair;
 
 import com.example.pc.dissertation.db.daos.*;
 import com.example.pc.dissertation.db.tables.StructuredLogTable;
 import com.example.pc.dissertation.models.BusinessProcess;
+import com.example.pc.dissertation.processbuilders.OpenXESBuilder;
+
+import java.io.IOException;
+import java.util.List;
 
 public class Method2Step2Activity extends Activity implements LoaderManager.LoaderCallbacks {
 
@@ -27,6 +32,11 @@ public class Method2Step2Activity extends Activity implements LoaderManager.Load
             String endItem = extras.getString(Method2Step1Activity.EXTRAS_END_ITEM);
             createStructLog();
             buildStructuredLog(searchVal, startItem, endItem);
+            try {
+                OpenXESBuilder.generateLog();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -38,9 +48,12 @@ public class Method2Step2Activity extends Activity implements LoaderManager.Load
     }
 
     private void buildStructuredLog(String searchVal, String startItem, String endItem) {
-        Cursor cursor = StructuredLogDAO.findProcessEvents(searchVal, startItem, endItem);
-        BusinessProcess businessProcess = BusinessProcess.createFromCursor(cursor);
-        StructuredLogDAO.insertProcess(businessProcess);
+        List<Pair> cursorList = StructuredLogDAO.findProcessEvents(searchVal, startItem, endItem);
+        for(Pair pair: cursorList) {
+            Cursor cursor = EventsDAO.getRowsBetween(pair.first,pair.second);
+            BusinessProcess businessProcess = BusinessProcess.createFromCursor(cursor);
+            StructuredLogDAO.insertProcess(businessProcess);
+        }
     }
 
     @Override
