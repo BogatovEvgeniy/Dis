@@ -37,6 +37,13 @@ public class OpenXESBuilder {
     public static String XML_CLOSE_ELEMENT_EVENT = "</event>";
 
     // Attributes
+    public static String XML_KEY_PREFIX_ORG = "org:";
+    public static String XML_KEY_PREFIX_CONCEPT = "concept:";
+    public static String XML_KEY_PREFIX_TIME = "time";
+
+
+    //Prefix
+    public static String XML_ATTR_ACTIVITY_NAME;
     public static String XML_ATTR_USER;
     public static String XML_ATTR_USER_ROLE;
     public static String XML_ATTR_OBJECT;
@@ -75,6 +82,7 @@ public class OpenXESBuilder {
         bufferedWriter.write(XML_NECESSURRY_EXTENTION_PART);
 
         int currentProcess = 0;
+        int activityNameIndex = 0;
         int processIndex = 0;
         int userIndex = 0;
         int userRoleIndex = 0;
@@ -84,9 +92,10 @@ public class OpenXESBuilder {
         while (logCursor.moveToNext()) {
             if (logCursor.getPosition() == 0) {
                 processIndex = logCursor.getColumnIndex(StructuredLogTable.PROCESS);
+                activityNameIndex = logCursor.getColumnIndex(StructuredLogTable.ACTIVITY_NAME);
                 userIndex = logCursor.getColumnIndex(StructuredLogTable.USER);
                 userRoleIndex = logCursor.getColumnIndex(StructuredLogTable.USER_ROLE);
-                objectIndex = logCursor.getColumnIndex(StructuredLogTable.OBJECT);
+                objectIndex = logCursor.getColumnIndex(StructuredLogTable.RESOURCE);
                 timestampIndex = logCursor.getColumnIndex(StructuredLogTable.TIMESTAMP);
                 statusIndex = logCursor.getColumnIndex(StructuredLogTable.STATUS);
                 currentProcess = logCursor.getInt(processIndex);
@@ -100,13 +109,15 @@ public class OpenXESBuilder {
             }
 
             bufferedWriter.write(XML_OPEN_ELEMENT_EVENT);
+            insertStringData(bufferedWriter, STRING_DATA, XML_KEY_PREFIX_CONCEPT + StructuredLogTable.ACTIVITY_NAME,
+                    logCursor.getString(activityNameIndex));
             insertStringData(bufferedWriter, STRING_DATA, StructuredLogTable.USER,
                     logCursor.getString(userIndex));
             insertStringData(bufferedWriter, STRING_DATA, StructuredLogTable.USER_ROLE,
                     logCursor.getString(userRoleIndex));
-            insertStringData(bufferedWriter, STRING_DATA, StructuredLogTable.OBJECT,
+            insertStringData(bufferedWriter, STRING_DATA, XML_KEY_PREFIX_ORG + StructuredLogTable.RESOURCE,
                     logCursor.getString(objectIndex));
-            insertStringData(bufferedWriter, DATE_DATA, StructuredLogTable.TIMESTAMP,
+            insertStringData(bufferedWriter, DATE_DATA, XML_KEY_PREFIX_TIME + StructuredLogTable.TIMESTAMP,
                     logCursor.getString(timestampIndex));
             insertStringData(bufferedWriter, STRING_DATA, StructuredLogTable.STATUS,
                     logCursor.getString(statusIndex));

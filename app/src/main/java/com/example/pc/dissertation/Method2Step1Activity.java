@@ -11,6 +11,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.pc.dissertation.db.daos.EventsDAO;
+import com.example.pc.dissertation.db.tables.EventsTable;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -21,7 +22,7 @@ public class Method2Step1Activity extends Activity {
     public static final String EXTRAS_START_ITEM = "startItem";
     public static final String EXTRAS_END_ITEM = "endItem";
     private Spinner selectSearchStructElement;
-    private BPLog.LogStructElem selectedStructElem;
+    private String selectedStructElem;
     private Spinner startItemSpinner;
     private Spinner endItemSpinner;
     private String startItem;
@@ -42,7 +43,7 @@ public class Method2Step1Activity extends Activity {
             public void onClick(View v) {
                 Intent intent = new Intent(Method2Step1Activity.this, Method2Step2Activity.class);
                 Bundle bundle = new Bundle();
-                bundle.putString(EXTRAS_SEARCH_VAL, selectedStructElem.name());
+                bundle.putString(EXTRAS_SEARCH_VAL, selectedStructElem);
                 bundle.putString(EXTRAS_START_ITEM, startItem);
                 bundle.putString(EXTRAS_END_ITEM, endItem);
                 intent.putExtras(bundle);
@@ -52,11 +53,7 @@ public class Method2Step1Activity extends Activity {
     }
 
     private void setUpSpinner() {
-        BPLog.LogStructElem[] logStructElems = BPLog.LogStructElem.values();
-        String[] values = new String[logStructElems.length];
-        for (int i = 0; i < logStructElems.length; i++) {
-            values[i] = logStructElems[i].toString();
-        }
+        String[] values = EventsTable.getAllColumnsName().toArray(new String[]{});
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, values);
         selectSearchStructElement.setAdapter(arrayAdapter);
@@ -65,21 +62,18 @@ public class Method2Step1Activity extends Activity {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position,
                             long id) {
-                        selectedStructElem = BPLog.LogStructElem.values()[position];
-                        if (!selectedStructElem.equals(BPLog.LogStructElem.CUSTOM)) {
-                            updateElementSelectionSpinners();
-                        }
+                        selectedStructElem = EventsTable.getAllColumnsName().get(position);
+                        updateElementSelectionSpinners();
                     }
 
                     @Override
                     public void onNothingSelected(AdapterView<?> parent) {
-
                     }
                 });
     }
 
     private void updateElementSelectionSpinners() {
-        List<String> selectItemsSet = getColumnItemsFromDB(selectedStructElem.name());
+        List<String> selectItemsSet = getColumnItemsFromDB(selectedStructElem);
         startItemSpinner.setAdapter(
                 new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, selectItemsSet));
         endItemSpinner.setAdapter(

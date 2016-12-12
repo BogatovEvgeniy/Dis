@@ -12,15 +12,17 @@ public class BusinessProcess {
 
     public static BusinessProcess createFromCursor(Cursor cursor) {
         BusinessProcess businessProcess = new BusinessProcess();
+        int activityNameIndex = cursor.getColumnIndex(StructuredLogTable.ACTIVITY_NAME);
         int userIndex = cursor.getColumnIndex(StructuredLogTable.USER);
         int userRoleIndex = cursor.getColumnIndex(StructuredLogTable.USER_ROLE);
-        int objectIndex = cursor.getColumnIndex(StructuredLogTable.OBJECT);
+        int objectIndex = cursor.getColumnIndex(StructuredLogTable.RESOURCE);
         int timestampIndex = cursor.getColumnIndex(StructuredLogTable.TIMESTAMP);
         int statusIndex = cursor.getColumnIndex(StructuredLogTable.STATUS);
 
         if (cursor.moveToFirst()) {
             do {
                 Event event = new Event();
+                event.setActivityName(cursor.getString(activityNameIndex));
                 event.setUserName(cursor.getString(userIndex));
                 event.setUserRole(cursor.getString(userRoleIndex));
                 event.setObject(cursor.getString(objectIndex));

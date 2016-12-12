@@ -1,12 +1,21 @@
 package com.example.pc.dissertation.models;
 
 public class Event {
+    private String activityName;
     private String userName;
     private String userRole;
     private String object;
     private String timestamp;
     private String status;
 
+
+    public String getActivityName() {
+        return activityName;
+    }
+
+    public void setActivityName(String activityName) {
+        this.activityName = activityName;
+    }
 
     public String getUserName() {
         return userName;

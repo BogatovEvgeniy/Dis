@@ -78,6 +78,7 @@ public class RawLogCursorAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         ViewHolder viewHolder = (ViewHolder) view.getTag();
+
         for (int i = 0; i < viewHolder.elementsViewList.size(); i++) {
             viewHolder.elementsViewList.get(i).setText(cursor.getString(i));
             if (cursor.isFirst()) {

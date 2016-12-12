@@ -57,22 +57,22 @@ public class StoreInDBUnstructLogTask implements Runnable {
     }
 
     private void insertRowIntoEventTable(Cursor cursor, int[] orderOfInsertionValues) throws ParseException {
-        if (cursor.moveToFirst()) {
             int i = 0;
-            do {
+            while (cursor.moveToNext()){
                 i++;
                 // TODO It's terrible but I have no time to make right decision is it should be builder, string arr, structure or smthg. else
-                int userIndex = orderOfInsertionValues[0];
-                int userRoleIndex = orderOfInsertionValues[1];
-                int objectIndex = orderOfInsertionValues[2];
-                int timestumpIndex = orderOfInsertionValues[3];
+                int activityIndex = orderOfInsertionValues[0];
+                int userIndex = orderOfInsertionValues[1];
+                int userRoleIndex = orderOfInsertionValues[2];
+                int objectIndex = orderOfInsertionValues[3];
+                int timestumpIndex = orderOfInsertionValues[4];
                 EventsDAO.insert(
+                        activityIndex == -1 ? null : cursor.getString(activityIndex),
                         userIndex == -1 ? null : cursor.getString(userIndex),
                         userRoleIndex == -1 ? null : cursor.getString(userRoleIndex),
                         objectIndex == -1 ? null : cursor.getString(objectIndex),
                         timestumpIndex == -1 ? null : new SimpleDateFormat("dd/MM/yyyy").parse(cursor.getString(timestumpIndex)).getTime());
-            } while (cursor.moveToNext());
+            };
             Log.d(TAG, "The insertion was madden " + i + " times");
-        }
     }
 }

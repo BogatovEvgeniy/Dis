@@ -17,9 +17,6 @@ public class BPLog {
     private Map<LogStructElem, List<String>> log;
     private List<List<String>> rawLog;
 
-    private BPLog() {
-    }
-
     private BPLog(String filePath) {
         this.filePath = filePath;
     }
@@ -106,7 +103,7 @@ public class BPLog {
     }
 
     public enum LogStructElem {
-        CUSTOM, PROCESS, ACTIVITY, EVENT, USER, USER_ROLE, OBJECT, TIMESTAMP, STATUS;
+        CUSTOM, PROCESS, ACTIVITY, EVENT, USER, USER_ROLE, RESOURCE, TIMESTAMP, STATUS;
 
         @Override
         public String toString() {

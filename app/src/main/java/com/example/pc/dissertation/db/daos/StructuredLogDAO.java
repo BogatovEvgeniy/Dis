@@ -11,12 +11,15 @@ import com.example.pc.dissertation.db.tables.StructuredLogTable;
 import com.example.pc.dissertation.models.BusinessProcess;
 import com.example.pc.dissertation.models.Event;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
 import static com.example.pc.dissertation.db.daos.Utils.insertValue;
 
 public class StructuredLogDAO {
+    public static final String DATE_TIME_FORMAT = "yyyy-MM-dd\'T\'HH:mm:ss.SSSZ";
     static long processCounter = 0L;
 
     public static void create() {
@@ -28,10 +31,11 @@ public class StructuredLogDAO {
         for (Event event : businessProcess.getEvents()) {
             ContentValues contentValues = new ContentValues();
             insertValue(contentValues, StructuredLogTable.PROCESS, String.valueOf(processCounter));
+            insertValue(contentValues, StructuredLogTable.ACTIVITY_NAME, event.getActivityName());
             insertValue(contentValues, StructuredLogTable.USER, event.getUserName());
             insertValue(contentValues, StructuredLogTable.USER_ROLE, event.getUserRole());
-            insertValue(contentValues, StructuredLogTable.OBJECT, event.getObject());
-            insertValue(contentValues, StructuredLogTable.TIMESTAMP, event.getTimestamp());
+            insertValue(contentValues, StructuredLogTable.RESOURCE, event.getObject());
+            insertValue(contentValues, StructuredLogTable.TIMESTAMP, new SimpleDateFormat(DATE_TIME_FORMAT).format(new Date(event.getTimestamp())));
             insertValue(contentValues, StructuredLogTable.STATUS, event.getStatus());
             AppApplication.getWritableDBInstance().insert(StructuredLogTable.TABLE_NAME, null,
                     contentValues);
