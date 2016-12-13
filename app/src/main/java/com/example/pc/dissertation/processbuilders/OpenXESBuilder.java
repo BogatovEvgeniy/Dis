@@ -14,7 +14,8 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 
 public class OpenXESBuilder {
-    public static String DEFAULT_XML_HEADER = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+    public static final String ACTIVITY_NAME = "name";
+    public static String DEFAULT_XML_HEADER = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 
     //Elements
     public static String XML_OPEN_ELEMENT_LOG = "<log xes.version=\"1.0\" xes.features=\"nested-attributes\" openxes.version=\"1.0RC7\" xmlns=\"http://www.xes-standard.org/\">";
@@ -39,24 +40,18 @@ public class OpenXESBuilder {
     // Attributes
     public static String XML_KEY_PREFIX_ORG = "org:";
     public static String XML_KEY_PREFIX_CONCEPT = "concept:";
-    public static String XML_KEY_PREFIX_TIME = "time";
+    public static String XML_KEY_PREFIX_TIME = "time:";
 
-
-    //Prefix
-    public static String XML_ATTR_ACTIVITY_NAME;
-    public static String XML_ATTR_USER;
-    public static String XML_ATTR_USER_ROLE;
-    public static String XML_ATTR_OBJECT;
-    public static String XML_ATTR_TIMESTAMP;
-    public static String XML_ATTR_STATUS;
-
-
+    //Extra elements
+    public  static String XML_NEW_LINE = "\n";
+    public  static String XML_TAB = "\t";
+    
     // Types
     public static String STRING_DATA = "<string ";
     public static String DATE_DATA = "<date ";
     public static String CLOSE_ELEMENT = "  />";
     public static String EVENT_ATR_KEY = "  key=\"";
-    public static String EVENT_ATR_VAL = "  val=\"";
+    public static String EVENT_ATR_VAL = "  value=\"";
 
 
     public static void generateLog() throws IOException {
@@ -78,8 +73,8 @@ public class OpenXESBuilder {
         }
 
         bufferedWriter.write(DEFAULT_XML_HEADER);
-        bufferedWriter.write(XML_OPEN_ELEMENT_LOG);
-        bufferedWriter.write(XML_NECESSURRY_EXTENTION_PART);
+        bufferedWriter.write(XML_OPEN_ELEMENT_LOG + XML_NEW_LINE);
+        bufferedWriter.write(XML_NECESSURRY_EXTENTION_PART + XML_NEW_LINE);
 
         int currentProcess = 0;
         int activityNameIndex = 0;
@@ -92,24 +87,24 @@ public class OpenXESBuilder {
         while (logCursor.moveToNext()) {
             if (logCursor.getPosition() == 0) {
                 processIndex = logCursor.getColumnIndex(StructuredLogTable.PROCESS);
-                activityNameIndex = logCursor.getColumnIndex(StructuredLogTable.ACTIVITY_NAME);
+                activityNameIndex = logCursor.getColumnIndex(StructuredLogTable.ACTIVITY);
                 userIndex = logCursor.getColumnIndex(StructuredLogTable.USER);
                 userRoleIndex = logCursor.getColumnIndex(StructuredLogTable.USER_ROLE);
                 objectIndex = logCursor.getColumnIndex(StructuredLogTable.RESOURCE);
                 timestampIndex = logCursor.getColumnIndex(StructuredLogTable.TIMESTAMP);
                 statusIndex = logCursor.getColumnIndex(StructuredLogTable.STATUS);
                 currentProcess = logCursor.getInt(processIndex);
-                bufferedWriter.write(XML_OPEN_ELEMENT_TRACE);
+                bufferedWriter.write(XML_TAB + XML_OPEN_ELEMENT_TRACE + XML_NEW_LINE);
             }
 
             if (currentProcess != logCursor.getInt(processIndex)) {
                 currentProcess = logCursor.getInt(processIndex);
-                bufferedWriter.write(XML_CLOSE_ELEMENT_TRACE);
-                bufferedWriter.write(XML_OPEN_ELEMENT_TRACE);
+                bufferedWriter.write(XML_TAB + XML_CLOSE_ELEMENT_TRACE + XML_NEW_LINE);
+                bufferedWriter.write(XML_TAB + XML_OPEN_ELEMENT_TRACE + XML_NEW_LINE);
             }
 
-            bufferedWriter.write(XML_OPEN_ELEMENT_EVENT);
-            insertStringData(bufferedWriter, STRING_DATA, XML_KEY_PREFIX_CONCEPT + StructuredLogTable.ACTIVITY_NAME,
+            bufferedWriter.write(XML_TAB + XML_TAB + XML_OPEN_ELEMENT_EVENT + XML_NEW_LINE);
+            insertStringData(bufferedWriter, STRING_DATA, XML_KEY_PREFIX_CONCEPT + ACTIVITY_NAME,
                     logCursor.getString(activityNameIndex));
             insertStringData(bufferedWriter, STRING_DATA, StructuredLogTable.USER,
                     logCursor.getString(userIndex));
@@ -121,9 +116,9 @@ public class OpenXESBuilder {
                     logCursor.getString(timestampIndex));
             insertStringData(bufferedWriter, STRING_DATA, StructuredLogTable.STATUS,
                     logCursor.getString(statusIndex));
-            bufferedWriter.write(XML_CLOSE_ELEMENT_EVENT);
+            bufferedWriter.write(XML_TAB + XML_TAB + XML_CLOSE_ELEMENT_EVENT + XML_NEW_LINE);
         }
-        bufferedWriter.write(XML_CLOSE_ELEMENT_TRACE);
+        bufferedWriter.write(XML_TAB + XML_CLOSE_ELEMENT_TRACE + XML_NEW_LINE);
         bufferedWriter.write(XML_CLOSE_ELEMENT_LOG);
         bufferedWriter.close();
     }
@@ -131,6 +126,6 @@ public class OpenXESBuilder {
     private static void insertStringData(BufferedWriter bufferedWriter, String elementType,
             String key, String val) throws IOException {
         bufferedWriter.write(
-                elementType + EVENT_ATR_KEY + key + "\"" + EVENT_ATR_VAL + val + "\"" + CLOSE_ELEMENT);
+                XML_TAB + XML_TAB + XML_TAB + elementType + EVENT_ATR_KEY + key + "\"" + EVENT_ATR_VAL + val + "\"" + CLOSE_ELEMENT  + XML_NEW_LINE);
     }
 }
