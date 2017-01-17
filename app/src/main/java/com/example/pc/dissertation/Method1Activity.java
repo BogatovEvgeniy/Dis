@@ -11,8 +11,11 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -33,7 +36,8 @@ public class Method1Activity extends AppCompatActivity {
     private static final int REQUEST_CODE_GET_LOG_FILE = 0x0001;
     private static final int REQUEST_STORAGE_PERM_CODE = 0x0002;
     private static final java.lang.String GET_FILE_THREAD_NAME = "GET_FILE_BY_URI";
-    public static final String ELEMENTS_COLUMN_MAP = "ELEMENTS_COLUMN_MAP";
+    public static final String EXTRA_ELEMENTS_COLUMN_MAP = "EXTRA_ELEMENTS_COLUMN_MAP";
+    public static final String EXTRA_DATE_TIME_FORMAT = "EXTRA_DATE_TIME_FORMAT";
     private ListView rawLogView;
     private BPLog log;
     private LinearLayout progressLayout;
@@ -43,6 +47,7 @@ public class Method1Activity extends AppCompatActivity {
     private TextView lineSeparatorEt;
     private HorizontalScrollView horizontalScrollView;
     private RawLogCursorAdapter rawLogAdapter;
+    private EditText dateTimeFormat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +61,7 @@ public class Method1Activity extends AppCompatActivity {
         lineSeparatorEt = ((TextView) findViewById(R.id.lineSeparatorSymb));
         progressLayout = (LinearLayout) findViewById(R.id.progress);
         rawLogView = (ListView) findViewById(R.id.rawLogView);
+        dateTimeFormat = (EditText) findViewById(R.id.dateFormat);
     }
 
     private View.OnClickListener onParseBtnClick() {
@@ -81,7 +87,8 @@ public class Method1Activity extends AppCompatActivity {
                     Map<String, Integer> elementColumnMap = rawLogAdapter.getElementColumnMap();
                     Intent intent = new Intent(Method1Activity.this, SelectStrategyActivity.class);
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable(ELEMENTS_COLUMN_MAP, (HashMap)elementColumnMap);
+                    bundle.putSerializable(EXTRA_ELEMENTS_COLUMN_MAP, (HashMap)elementColumnMap);
+                    bundle.putString(EXTRA_DATE_TIME_FORMAT, dateTimeFormat.getText().toString());
                     intent.putExtras(bundle);
                     startActivity(intent);
                 }

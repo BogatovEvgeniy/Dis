@@ -79,7 +79,7 @@ public class DefaultParseService extends ParseService {
             int nextElementSeparatorIndex = parseLine.indexOf(elementSeparator, elementOffset);
             String element;
             if (nextElementSeparatorIndex == -1) {
-                element = parseLine.substring(elementOffset, parseLine.length() - 1);
+                element = parseLine.substring(elementOffset, parseLine.length());
             } else {
                 element = parseLine.substring(elementOffset, nextElementSeparatorIndex);
             }

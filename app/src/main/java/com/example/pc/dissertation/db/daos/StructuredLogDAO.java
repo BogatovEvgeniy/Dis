@@ -56,31 +56,42 @@ public class StructuredLogDAO {
     }
 
     private static void buildStartEndProcessItemsList(List<Pair> startEndItemList,
-            Cursor firstItemIndexCursor, Cursor secondItemIndexCursor) {
+                                                      Cursor firstItemIndexCursor, Cursor secondItemIndexCursor) {
         long startItemID = -1;
         long firstItemTimestamp = 0;
+        long lastFirstItemTimestamp = 0;
         long endItemID = -1;
         long secondItemTimestamp = 0;
+        long lastSecondItemTimestamp = 0;
 
         while (firstItemIndexCursor.moveToNext() && secondItemIndexCursor.moveToNext()) {
             // Get start item pos
             startItemID = firstItemIndexCursor.getLong(firstItemIndexCursor.getColumnIndex(EventsTable._ID));
             firstItemTimestamp = firstItemIndexCursor.getLong(firstItemIndexCursor.getColumnIndex(EventsTable.TIMESTAMP));
-            while (firstItemTimestamp < secondItemTimestamp) {
-                startItemID = firstItemIndexCursor.getLong(firstItemIndexCursor.getColumnIndex(EventsTable._ID));
-                firstItemTimestamp = firstItemIndexCursor.getLong(firstItemIndexCursor.getColumnIndex(EventsTable.TIMESTAMP));
-                if (secondItemIndexCursor.isLast()) break;
+            while (firstItemTimestamp < lastFirstItemTimestamp && firstItemTimestamp < secondItemTimestamp) {
+                if (!firstItemIndexCursor.isLast()) {
+                    firstItemIndexCursor.moveToNext();
+                    startItemID = firstItemIndexCursor.getLong(firstItemIndexCursor.getColumnIndex(EventsTable._ID));
+                    firstItemTimestamp = firstItemIndexCursor.getLong(firstItemIndexCursor.getColumnIndex(EventsTable.TIMESTAMP));
+                } else {
+                    break;
+                }
             }
+            lastFirstItemTimestamp = firstItemTimestamp;
 
             // Get end item pos
             endItemID = secondItemIndexCursor.getLong(secondItemIndexCursor.getColumnIndex(EventsTable._ID));
             secondItemTimestamp = secondItemIndexCursor.getLong(secondItemIndexCursor.getColumnIndex(EventsTable.TIMESTAMP));
-            while (secondItemTimestamp < firstItemTimestamp) {
-                endItemID = secondItemIndexCursor.getLong(secondItemIndexCursor.getColumnIndex(EventsTable._ID));
-                secondItemTimestamp = secondItemIndexCursor.getLong(secondItemIndexCursor.getColumnIndex(EventsTable.TIMESTAMP));
-
-                if (secondItemIndexCursor.isLast()) break;
+            while (secondItemTimestamp < lastSecondItemTimestamp && secondItemTimestamp < firstItemTimestamp) {
+                if (!secondItemIndexCursor.isLast()) {
+                    secondItemIndexCursor.moveToNext();
+                    endItemID = secondItemIndexCursor.getLong(secondItemIndexCursor.getColumnIndex(EventsTable._ID));
+                    secondItemTimestamp = secondItemIndexCursor.getLong(secondItemIndexCursor.getColumnIndex(EventsTable.TIMESTAMP));
+                } else {
+                    break;
+                }
             }
+            lastSecondItemTimestamp = secondItemTimestamp;
             startEndItemList.add(new Pair(startItemID, endItemID));
         }
     }

@@ -29,10 +29,11 @@ public class SelectStrategyActivity extends Activity {
         findViewById(R.id.object_users_analyze).setOnClickListener(defaultListener);
 
         if (getIntent().getExtras() != null) {
-            final HashMap strucElementIndexMap = (HashMap) (getIntent().getExtras().getSerializable(Method1Activity.ELEMENTS_COLUMN_MAP));
+            final HashMap strucElementIndexMap = (HashMap) (getIntent().getExtras().getSerializable(Method1Activity.EXTRA_ELEMENTS_COLUMN_MAP));
+            final String dateTimeFormat = getIntent().getExtras().getString(Method1Activity.EXTRA_DATE_TIME_FORMAT);
             if (strucElementIndexMap != null) {
                 Log.d(SelectStrategyActivity.class.getName(), strucElementIndexMap.toString());
-                new Thread(new StoreInDBUnstructLogTask(strucElementIndexMap)).start();
+                new Thread(new StoreInDBUnstructLogTask(strucElementIndexMap, dateTimeFormat)).start();
             }
         }
     }
