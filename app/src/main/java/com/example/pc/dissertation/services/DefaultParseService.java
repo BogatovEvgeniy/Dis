@@ -1,12 +1,15 @@
 package com.example.pc.dissertation.services;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
 import android.os.HandlerThread;
 
 import com.example.pc.dissertation.AppApplication;
 import com.example.pc.dissertation.BPLog;
 import com.example.pc.dissertation.db.daos.RawLodTableDAO;
+import com.example.pc.dissertation.db.daos.Utils;
+import com.example.pc.dissertation.db.tables.EventsTable;
 import com.example.pc.dissertation.db.tables.RawLogTable;
 
 import java.io.BufferedReader;
@@ -65,7 +68,12 @@ public class DefaultParseService extends ParseService {
     }
 
     private void storeRawLogInDB(List<List<String>> rawLog) {
-        AppApplication.getWritableDBInstance().execSQL(RawLogTable.getInstance(rawLog).getCreateStatement());
+        SQLiteDatabase writableDBInstance = AppApplication.getWritableDBInstance();
+        if (Utils.checkTableExistance(RawLogTable.TABLE_NAME)){
+            writableDBInstance.execSQL(RawLogTable.getInstance(rawLog).getDeleteStatement());
+        }
+
+        writableDBInstance.execSQL(RawLogTable.getInstance(rawLog).getCreateStatement());
         for (List<String> row : rawLog) {
             RawLodTableDAO.insert(row);
         }
